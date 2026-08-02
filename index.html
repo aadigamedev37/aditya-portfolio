@@ -16,33 +16,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'orbitron': ['Orbitron', 'sans-serif'],
-                        'space': ['Space Grotesk', 'sans-serif'],
-                        'inter': ['Inter', 'sans-serif'],
-                        'mono': ['"JetBrains Mono"', 'monospace'],
-                    },
-                    colors: {
-                        'game-black': '#030308',
-                        'game-charcoal': '#08080f',
-                        'game-gunmetal': '#0f0f18',
-                        'game-surface': '#161622',
-                        'game-border': '#2a2a3f',
-                        'cyan-glow': '#00e5ff',
-                        'purple-glow': '#a855f7',
-                        'electric-blue': '#22d3ee',
-                        'neon-green': '#39ff14',
-                        'hot-pink': '#ff2d95',
-                        'amber-glow': '#ffb020',
-                        'magenta': '#ff00aa',
-                        'lime': '#b8ff3c',
-                        'game-text': '#e8e8f0',
-                        'game-muted': '#8b9bb8',
-                    }
-                }
-            }
+        theme: {
+        extend: {
+        fontFamily: {
+        'orbitron': ['Orbitron', 'sans-serif'],
+        'space': ['Space Grotesk', 'sans-serif'],
+        'inter': ['Inter', 'sans-serif'],
+        'mono': ['"JetBrains Mono"', 'monospace'],
+        },
+        colors: {
+        'game-black': '#030308',
+        'game-charcoal': '#08080f',
+        'game-gunmetal': '#0f0f18',
+        'game-surface': '#161622',
+        'game-border': '#2a2a3f',
+        'cyan-glow': '#00e5ff',
+        'purple-glow': '#a855f7',
+        'electric-blue': '#22d3ee',
+        'neon-green': '#39ff14',
+        'hot-pink': '#ff2d95',
+        'amber-glow': '#ffb020',
+        'magenta': '#ff00aa',
+        'lime': '#b8ff3c',
+        'game-text': '#e8e8f0',
+        'game-muted': '#8b9bb8',
+        }
+        }
+        }
         }
     </script>
     <style>
@@ -57,139 +57,294 @@
             --bg: #030308;
             --surface: #0f0f18;
         }
-        
+
         body.matrix-mode {
             --cyan: #00ff41;
             --purple: #008f11;
             --blue: #00ff41;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', sans-serif; background: var(--bg); color: #e8e8f0;
-            overflow-x: hidden; cursor: crosshair;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #08080f; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--cyan), var(--purple)); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--pink), var(--amber)); }
-        ::selection { background: rgba(0, 229, 255, 0.35); color: #fff; }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: #e8e8f0;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #08080f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--cyan), var(--purple));
+            border-radius: 3px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(180deg, var(--pink), var(--amber));
+            }
+
+        ::selection {
+            background: rgba(0, 229, 255, 0.35);
+            color: #fff;
+        }
 
         .scanlines {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9999; opacity: 0.035;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.035;
             background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.35) 2px, rgba(0,0,0,0.35) 4px);
         }
 
-        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .bg-gradient-anim {
-            background:
-                radial-gradient(ellipse at 15% 40%, rgba(0,229,255,0.12) 0%, transparent 45%),
-                radial-gradient(ellipse at 85% 15%, rgba(168,85,247,0.10) 0%, transparent 45%),
-                radial-gradient(ellipse at 50% 85%, rgba(255,45,149,0.07) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 60%, rgba(57,255,20,0.04) 0%, transparent 40%);
+            background: radial-gradient(ellipse at 15% 40%, rgba(0,229,255,0.12) 0%, transparent 45%), radial-gradient(ellipse at 85% 15%, rgba(168,85,247,0.10) 0%, transparent 45%), radial-gradient(ellipse at 50% 85%, rgba(255,45,149,0.07) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(57,255,20,0.04) 0%, transparent 40%);
             animation: bgShift 18s ease-in-out infinite alternate;
         }
+
         @keyframes bgShift {
-            0% { transform: scale(1) translate(0,0); }
-            50% { transform: scale(1.12) translate(-3%,2%); }
-            100% { transform: scale(1) translate(3%,-2%); }
+            0% {
+                transform: scale(1) translate(0,0);
+            }
+
+            50% {
+                transform: scale(1.12) translate(-3%,2%);
+            }
+
+            100% {
+                transform: scale(1) translate(3%,-2%);
+            }
         }
+
         .light-rays {
-            background: conic-gradient(from 180deg at 50% 50%,
-                transparent 0deg, rgba(0,229,255,0.04) 50deg, transparent 100deg,
-                rgba(168,85,247,0.035) 160deg, transparent 220deg,
-                rgba(255,45,149,0.03) 280deg, transparent 340deg);
+            background: conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(0,229,255,0.04) 50deg, transparent 100deg, rgba(168,85,247,0.035) 160deg, transparent 220deg, rgba(255,45,149,0.03) 280deg, transparent 340deg);
             animation: rayRotate 40s linear infinite;
         }
-        @keyframes rayRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        @keyframes rayRotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
         .grid-bg {
             opacity: 0.14;
             background-image: linear-gradient(rgba(0,229,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.12) 1px, transparent 1px);
             background-size: 55px 55px;
-            transform: perspective(500px) rotateX(60deg); transform-origin: center top;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center top;
             animation: gridMove 22s linear infinite;
         }
+
         @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(55px); }
+            0% {
+                transform: perspective(500px) rotateX(60deg) translateY(0);
+            }
+
+            100% {
+                transform: perspective(500px) rotateX(60deg) translateY(55px);
+            }
         }
+
         .hex-float {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2300e5ff' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-7.5L27.99 34H28v2.31h-.01L17 42.65V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             animation: hexDrift 28s linear infinite;
         }
-        @keyframes hexDrift { 0% { transform: translateY(0); } 100% { transform: translateY(-49px); } }
+
+        @keyframes hexDrift {
+            0% {
+                transform: translateY(0);
+            }
+
+            100% {
+                transform: translateY(-49px);
+            }
+        }
+
         .energy-fog {
-            background: radial-gradient(circle at 25% 70%, rgba(0,229,255,0.06) 0%, transparent 40%),
-                        radial-gradient(circle at 75% 25%, rgba(168,85,247,0.05) 0%, transparent 40%),
-                        radial-gradient(circle at 50% 50%, rgba(255,45,149,0.03) 0%, transparent 50%);
+            background: radial-gradient(circle at 25% 70%, rgba(0,229,255,0.06) 0%, transparent 40%), radial-gradient(circle at 75% 25%, rgba(168,85,247,0.05) 0%, transparent 40%), radial-gradient(circle at 50% 50%, rgba(255,45,149,0.03) 0%, transparent 50%);
             animation: fogMove 22s ease-in-out infinite alternate;
         }
-        @keyframes fogMove { 0% { opacity: 0.55; transform: translateX(-6%); } 100% { opacity: 1; transform: translateX(6%); } }
 
-        #particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        @keyframes fogMove {
+            0% {
+                opacity: 0.55;
+                transform: translateX(-6%);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(6%);
+            }
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
         .spotlight {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 2;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
             background: radial-gradient(circle 520px at var(--mouse-x,50%) var(--mouse-y,50%), rgba(0,229,255,0.07), transparent 70%);
         }
 
         .glass {
-            background: rgba(15,15,24,0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            background: rgba(15,15,24,0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border: 1px solid rgba(255,255,255,0.08);
         }
+
         .glass-strong {
-            background: rgba(8,8,15,0.92); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+            background: rgba(8,8,15,0.92);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
             border: 1px solid rgba(0,229,255,0.18);
         }
 
-        .hud-corners { position: relative; }
-        .hud-corners::before, .hud-corners::after {
-            content: ''; position: absolute; width: 22px; height: 22px;
-            border: 2px solid var(--cyan); opacity: 0.55; transition: all 0.3s ease;
-        }
-        .hud-corners::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-        .hud-corners::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-        .section-title {
-            font-family: 'Orbitron', sans-serif; position: relative; display: inline-block; letter-spacing: 0.15em; text-transform: uppercase;
-        }
-        .section-title::before {
-            content: ''; position: absolute; left: 0; bottom: -10px; width: 70px; height: 3px;
-            background: linear-gradient(90deg, var(--cyan), var(--pink), transparent);
+        .hud-corners {
+            position: relative;
         }
 
+            .hud-corners::before, .hud-corners::after {
+                content: '';
+                position: absolute;
+                width: 22px;
+                height: 22px;
+                border: 2px solid var(--cyan);
+                opacity: 0.55;
+                transition: all 0.3s ease;
+            }
+
+            .hud-corners::before {
+                top: -2px;
+                left: -2px;
+                border-right: none;
+                border-bottom: none;
+            }
+
+            .hud-corners::after {
+                bottom: -2px;
+                right: -2px;
+                border-left: none;
+                border-top: none;
+            }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+            .section-title::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -10px;
+                width: 70px;
+                height: 3px;
+                background: linear-gradient(90deg, var(--cyan), var(--pink), transparent);
+            }
+
         .neon-btn {
-            position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); border: 1px solid rgba(0,229,255,0.35);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            border: 1px solid rgba(0,229,255,0.35);
         }
-        .neon-btn:hover {
-            border-color: var(--cyan); box-shadow: 0 0 28px rgba(0,229,255,0.3); transform: translateY(-3px);
-        }
+
+            .neon-btn:hover {
+                border-color: var(--cyan);
+                box-shadow: 0 0 28px rgba(0,229,255,0.3);
+                transform: translateY(-3px);
+            }
 
         /* ============================================
             CYBERPUNK UI PROFILE CARD & PERFECTLY FRAMED PORTRAIT
             ============================================ */
         .holo-card {
-            background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(0,212,255,0.25);
             padding: 32px 24px 24px;
-            display: flex; flex-direction: column; align-items: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             box-shadow: 0 0 45px rgba(0,212,255,0.08), inset 0 0 25px rgba(0,212,255,0.03);
             animation: profileFloat 6s ease-in-out infinite;
-            position: relative; z-index: 2;
+            position: relative;
+            z-index: 2;
             width: 320px;
             transform-style: preserve-3d;
             will-change: transform;
         }
-        .holo-card::before {
-            content: ''; position: absolute; inset: -1px;
-            border: 1px solid rgba(0,212,255,0.45);
-            pointer-events: none;
-            animation: cardPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
+
+            .holo-card::before {
+                content: '';
+                position: absolute;
+                inset: -1px;
+                border: 1px solid rgba(0,212,255,0.45);
+                pointer-events: none;
+                animation: cardPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+
         @keyframes cardPulse {
-            0%, 100% { opacity: 0; transform: scale(1); }
-            50% { opacity: 0.35; transform: scale(1.02); }
+            0%, 100% {
+                opacity: 0;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.35;
+                transform: scale(1.02);
+            }
         }
 
         .portrait-container {
@@ -233,113 +388,592 @@
             display: block;
         }
 
-        @keyframes profileFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes profileFloat {
+            0%,100% {
+                transform: translateY(0);
+            }
 
-        .skill-card { position: relative; overflow: hidden; transition: all 0.4s ease; border: 1px solid rgba(255,255,255,0.05); }
-        .skill-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-6px); }
-        .skill-category-header { font-family: 'Orbitron', sans-serif; font-size: 10px; color: var(--cyan); letter-spacing: 0.15em; margin-top: 12px; }
-        .skill-desc { font-family: 'Space Grotesk', sans-serif; font-size: 9.5px; color: var(--game-muted); margin-bottom: 10px; }
-        .skill-hex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
-        .skill-hex-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 8px 10px; display: flex; align-items: center; gap: 8px; }
-        .skill-hex-dot { width: 6px; height: 6px; border-radius: 50%; }
-        .skill-hex-dot.expert { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
-        .skill-hex-dot.advanced { background: rgba(0,212,255,0.6); }
-        .skill-hex-dot.proficient { background: rgba(0,212,255,0.3); }
-
-        .project-card { position: relative; overflow: hidden; transition: all 0.5s ease; }
-        .project-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
-        .project-stats-overlay {
-            position: absolute; top: 0; left: 0; z-index: 10; background: rgba(3,3,8,0.93); backdrop-filter: blur(10px);
-            padding: 12px 16px; opacity: 0; pointer-events: none; transition: all 0.4s ease; border-bottom-right-radius: 12px; transform: translateX(-15px) translateY(-15px);
+            50% {
+                transform: translateY(-12px);
+            }
         }
-        .project-card:hover .project-stats-overlay { opacity: 1; transform: translateX(0) translateY(0); pointer-events: auto; }
-        .stat-row { display: flex; align-items: center; gap: 12px; width: 150px; margin-bottom: 8px; }
-        .stat-label { font-family: 'Space Grotesk', sans-serif; font-size: 9px; color: var(--game-muted); width: 70px; }
-        .stat-track { flex: 1; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
-        .stat-fill { height: 100%; width: 0%; border-radius: 3px; transition: width 1s ease 0.2s; }
-        .project-card:hover .stat-fill { width: var(--stat-width); }
-        .stat-fill.cyan { background: linear-gradient(90deg, var(--cyan), var(--blue)); }
-        .stat-fill.purple { background: linear-gradient(90deg, var(--purple), var(--pink)); }
-        .stat-fill.green { background: linear-gradient(90deg, var(--green), var(--cyan)); }
-        .stat-fill.amber { background: linear-gradient(90deg, var(--amber), var(--pink)); }
 
-        .timeline-line { position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: linear-gradient(to bottom, var(--cyan), var(--purple), transparent); }
-        .timeline-node { width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,229,255,0.4); }
+        .skill-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
 
-        .reveal { opacity: 0; transform: translateY(48px); transition: all 0.85s ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .mobile-menu { transform: translateX(100%); transition: transform 0.3s ease; }
-        .mobile-menu.open { transform: translateX(0); }
+            .skill-card:hover {
+                border-color: rgba(0,212,255,0.3);
+                transform: translateY(-6px);
+            }
 
-        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #39ff14; box-shadow: 0 0 10px #39ff14; }
-        .energy-burst { position: fixed; pointer-events: none; z-index: 9998; border-radius: 50%; background: radial-gradient(circle, rgba(0,229,255,0.45) 0%, transparent 70%); transform: translate(-50%,-50%) scale(0); animation: burstExpand 0.55s ease-out forwards; }
-        @keyframes burstExpand { 0% { transform: translate(-50%,-50%) scale(0); opacity: 1; } 100% { transform: translate(-50%,-50%) scale(4.2); opacity: 0; } }
+        .skill-category-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--cyan);
+            letter-spacing: 0.15em;
+            margin-top: 12px;
+        }
 
-        .social-link { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
-        .social-link:hover { border-color: var(--cyan); background: rgba(0,229,255,0.06); }
+        .skill-desc {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 9.5px;
+            color: var(--game-muted);
+            margin-bottom: 10px;
+        }
+
+        .skill-hex-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 6px;
+        }
+
+        .skill-hex-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-hex-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+            .skill-hex-dot.expert {
+                background: var(--cyan);
+                box-shadow: 0 0 6px var(--cyan);
+            }
+
+            .skill-hex-dot.advanced {
+                background: rgba(0,212,255,0.6);
+            }
+
+            .skill-hex-dot.proficient {
+                background: rgba(0,212,255,0.3);
+            }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+            .project-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+            }
+
+        .project-stats-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            background: rgba(3,3,8,0.93);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+            border-bottom-right-radius: 12px;
+            transform: translateX(-15px) translateY(-15px);
+        }
+
+        .project-card:hover .project-stats-overlay {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+            pointer-events: auto;
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 150px;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 9px;
+            color: var(--game-muted);
+            width: 70px;
+        }
+
+        .stat-track {
+            flex: 1;
+            height: 5px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 1s ease 0.2s;
+        }
+
+        .project-card:hover .stat-fill {
+            width: var(--stat-width);
+        }
+
+        .stat-fill.cyan {
+            background: linear-gradient(90deg, var(--cyan), var(--blue));
+        }
+
+        .stat-fill.purple {
+            background: linear-gradient(90deg, var(--purple), var(--pink));
+        }
+
+        .stat-fill.green {
+            background: linear-gradient(90deg, var(--green), var(--cyan));
+        }
+
+        .stat-fill.amber {
+            background: linear-gradient(90deg, var(--amber), var(--pink));
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--cyan), var(--purple), transparent);
+        }
+
+        .timeline-node {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--cyan);
+            box-shadow: 0 0 12px rgba(0,229,255,0.4);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(48px);
+            transition: all 0.85s ease;
+        }
+
+            .reveal.active {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+            .mobile-menu.open {
+                transform: translateX(0);
+            }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #39ff14;
+            box-shadow: 0 0 10px #39ff14;
+        }
+
+        .energy-burst {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,229,255,0.45) 0%, transparent 70%);
+            transform: translate(-50%,-50%) scale(0);
+            animation: burstExpand 0.55s ease-out forwards;
+        }
+
+        @keyframes burstExpand {
+            0% {
+                transform: translate(-50%,-50%) scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%,-50%) scale(4.2);
+                opacity: 0;
+            }
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+            .social-link:hover {
+                border-color: var(--cyan);
+                background: rgba(0,229,255,0.06);
+            }
 
         #xp-bar-container {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 55; background: rgba(3,3,8,0.88); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0,229,255,0.18); padding: 5px 16px; display: flex; align-items: center; gap: 12px;
-            font-family: 'Orbitron', monospace; font-size: 10px; opacity: 0; transform: translateY(-100%); transition: all 0.4s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 55;
+            background: rgba(3,3,8,0.88);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,229,255,0.18);
+            padding: 5px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Orbitron', monospace;
+            font-size: 10px;
+            opacity: 0;
+            transform: translateY(-100%);
+            transition: all 0.4s ease;
         }
-        #xp-bar-container.visible { opacity: 1; transform: translateY(0); }
-        .xp-label { color: var(--cyan); }
-        .xp-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
-        .xp-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--cyan), var(--purple)); border-radius: 3px; transition: width 0.25s ease-out; }
 
-        #achievement-container { position: fixed; top: 52px; right: 16px; z-index: 60; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-        .achievement-toast {
-            background: rgba(8,8,15,0.96); border: 1px solid rgba(0,229,255,0.35); border-left: 3px solid var(--cyan);
-            padding: 12px 18px; display: flex; align-items: center; gap: 12px; transform: translateX(120%); opacity: 0; animation: achievementSlide 0.5s ease forwards;
+            #xp-bar-container.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        .xp-label {
+            color: var(--cyan);
         }
-        @keyframes achievementSlide { to { transform: translateX(0); opacity: 1; } }
-        .achievement-toast.hiding { animation: achievementFade 0.4s ease forwards; }
-        @keyframes achievementFade { to { transform: translateX(120%); opacity: 0; } }
-        .achievement-title { font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--cyan); }
-        .achievement-desc { font-family: 'Space Grotesk', sans-serif; font-size: 10px; color: var(--game-muted); }
+
+        .xp-track {
+            flex: 1;
+            height: 5px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .xp-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--cyan), var(--purple));
+            border-radius: 3px;
+            transition: width 0.25s ease-out;
+        }
+
+        #achievement-container {
+            position: fixed;
+            top: 52px;
+            right: 16px;
+            z-index: 60;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .achievement-toast {
+            background: rgba(8,8,15,0.96);
+            border: 1px solid rgba(0,229,255,0.35);
+            border-left: 3px solid var(--cyan);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            opacity: 0;
+            animation: achievementSlide 0.5s ease forwards;
+        }
+
+        @keyframes achievementSlide {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .achievement-toast.hiding {
+            animation: achievementFade 0.4s ease forwards;
+        }
+
+        @keyframes achievementFade {
+            to {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+        .achievement-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--cyan);
+        }
+
+        .achievement-desc {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 10px;
+            color: var(--game-muted);
+        }
 
         #terminal-btn {
-            position: fixed; bottom: 24px; right: 24px; z-index: 70; width: 52px; height: 52px; border-radius: 50%;
-            background: rgba(8,8,15,0.92); border: 1px solid rgba(0,229,255,0.45); display: flex; align-items: center; justify-content: center; cursor: pointer;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 70;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(8,8,15,0.92);
+            border: 1px solid rgba(0,229,255,0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
+
         #terminal-window {
-            position: fixed; bottom: 88px; right: 24px; z-index: 70; width: 430px; max-width: calc(100vw - 48px); height: 330px;
-            background: rgba(3,3,8,0.97); border: 1px solid rgba(0,229,255,0.32); display: none; flex-direction: column; overflow: hidden;
+            position: fixed;
+            bottom: 88px;
+            right: 24px;
+            z-index: 70;
+            width: 430px;
+            max-width: calc(100vw - 48px);
+            height: 330px;
+            background: rgba(3,3,8,0.97);
+            border: 1px solid rgba(0,229,255,0.32);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
         }
-        #terminal-window.open { display: flex; }
-        .terminal-header { background: rgba(0,229,255,0.1); padding: 9px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(0,229,255,0.18); cursor: move; }
-        .terminal-body { flex: 1; padding: 12px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.65; }
-        .terminal-input { background: transparent; border: none; outline: none; color: var(--game-text); font-family: 'JetBrains Mono', monospace; font-size: 11px; flex: 1; }
+
+            #terminal-window.open {
+                display: flex;
+            }
+
+        .terminal-header {
+            background: rgba(0,229,255,0.1);
+            padding: 9px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0,229,255,0.18);
+            cursor: move;
+        }
+
+        .terminal-body {
+            flex: 1;
+            padding: 12px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            line-height: 1.65;
+        }
+
+        .terminal-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--game-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            flex: 1;
+        }
 
         #video-modal {
-            position: fixed; inset: 0; z-index: 100; background: rgba(3,3,8,0.97); backdrop-filter: blur(22px); display: none; align-items: center; justify-content: center; padding: 24px;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(3,3,8,0.97);
+            backdrop-filter: blur(22px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
         }
-        #video-modal.open { display: flex; }
-        .modal-content { width: 100%; max-width: 1000px; position: relative; }
-        .modal-close { position: absolute; top: -42px; right: 0; color: var(--game-muted); cursor: pointer; font-size: 26px; z-index: 10; }
-        .video-player-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border: 1px solid rgba(0,229,255,0.25); }
-        .video-player-container video, .video-player-container img { width: 100%; height: 100%; object-fit: contain; }
-        .video-controls { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); padding: 16px; display: flex; align-items: center; justify-content: space-between; opacity: 0; transition: opacity 0.3s; }
-        .video-player-container:hover .video-controls { opacity: 1; }
-        .video-mute-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: var(--game-text); padding: 6px 12px; cursor: pointer; }
-        .video-gallery-thumbs { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; }
-        .gallery-thumb { flex-shrink: 0; width: 120px; height: 68px; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; position: relative; overflow: hidden; }
-        .gallery-thumb.active { border-color: var(--cyan); }
-        .gallery-thumb img, .gallery-thumb video { width: 100%; height: 100%; object-fit: cover; }
-        .thumb-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.75); padding: 2px 6px; font-size: 9px; color: var(--game-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .loading-screen { position: fixed; inset: 0; z-index: 10000; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .loading-screen.hidden { opacity: 0; visibility: hidden; transition: all 0.8s ease; }
-        .loading-bar { width: 320px; height: 4px; background: rgba(255,255,255,0.08); position: relative; overflow: hidden; margin-top: 22px; }
-        .loading-bar-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink)); width: 0%; transition: width 0.3s ease; }
-        .loading-text { font-family: 'Orbitron', monospace; font-size: 12px; color: var(--cyan); margin-top: 12px; letter-spacing: 0.2em; }
-        .boot-line { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--game-muted); margin-bottom: 6px; opacity: 0; animation: bootAppear 0.3s ease forwards; }
-        .boot-line.success { color: #39ff14; }
-        .boot-line.process { color: var(--cyan); }
-        @keyframes bootAppear { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+            #video-modal.open {
+                display: flex;
+            }
 
-        .tag-pill:hover { border-color: rgba(0,229,255,0.4) !important; color: var(--cyan) !important; }
+        .modal-content {
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -42px;
+            right: 0;
+            color: var(--game-muted);
+            cursor: pointer;
+            font-size: 26px;
+            z-index: 10;
+        }
+
+        .video-player-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border: 1px solid rgba(0,229,255,0.25);
+        }
+
+            .video-player-container video, .video-player-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.85);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .video-player-container:hover .video-controls {
+            opacity: 1;
+        }
+
+        .video-mute-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--game-text);
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .video-gallery-thumbs {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+        }
+
+        .gallery-thumb {
+            flex-shrink: 0;
+            width: 120px;
+            height: 68px;
+            border: 1px solid rgba(255,255,255,0.12);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .gallery-thumb.active {
+                border-color: var(--cyan);
+            }
+
+            .gallery-thumb img, .gallery-thumb video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .thumb-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.75);
+            padding: 2px 6px;
+            font-size: 9px;
+            color: var(--game-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+            .loading-screen.hidden {
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.8s ease;
+            }
+
+        .loading-bar {
+            width: 320px;
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            position: relative;
+            overflow: hidden;
+            margin-top: 22px;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 12px;
+            color: var(--cyan);
+            margin-top: 12px;
+            letter-spacing: 0.2em;
+        }
+
+        .boot-line {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--game-muted);
+            margin-bottom: 6px;
+            opacity: 0;
+            animation: bootAppear 0.3s ease forwards;
+        }
+
+            .boot-line.success {
+                color: #39ff14;
+            }
+
+            .boot-line.process {
+                color: var(--cyan);
+            }
+
+        @keyframes bootAppear {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .tag-pill:hover {
+            border-color: rgba(0,229,255,0.4) !important;
+            color: var(--cyan) !important;
+        }
     </style>
 </head>
 <body class="bg-game-black text-game-text">
@@ -412,7 +1046,7 @@
                     <a href="#contact" class="nav-link ml-4 px-5 py-2 text-sm font-space border border-cyan-glow/35 text-cyan-glow hover:bg-cyan-glow/10 transition-all neon-btn">CONTACT</a>
                 </div>
                 <button aria-label="Toggle Mobile Menu" class="md:hidden p-2 text-game-muted hover:text-cyan-glow transition-colors" id="mobile-menu-btn">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" /></svg>
                 </button>
             </div>
         </div>
@@ -422,7 +1056,7 @@
     <div class="mobile-menu fixed inset-y-0 right-0 w-64 glass-strong z-50 md:hidden" id="mobile-menu">
         <div class="p-6">
             <button aria-label="Close Mobile Menu" class="absolute top-6 right-6 text-game-muted hover:text-cyan-glow" id="mobile-menu-close">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
             <div class="mt-16 space-y-4">
                 <a href="#about" class="block py-3 text-lg font-space text-game-muted hover:text-cyan-glow transition-colors border-b border-white/5">About</a>
@@ -480,32 +1114,32 @@
                     <div class="parallax-layer" data-speed="0.13">
                         <div class="flex justify-center md:justify-start gap-3">
                             <a href="https://github.com/aadigamedev37" target="_blank" class="social-link text-game-muted hover:text-cyan-glow">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
                                 <span class="font-space text-xs">GitHub</span>
                             </a>
                             <a href="https://linkedin.com/in/adityadange-dev" target="_blank" class="social-link text-game-muted hover:text-electric-blue">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
                                 <span class="font-space text-xs">LinkedIn</span>
                             </a>
-                            <a href="assets/resume/Aditya_Dange_Resume_Updated.html" target="_blank" class="social-link text-game-muted hover:text-hot-pink">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            <a href="assets/Resume/Aditya_Dange_Resume_Updated.html" target="_blank" class="social-link text-game-muted hover:text-hot-pink">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                                 <span class="font-space text-xs">View Resume</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- CYBERPUNK UI PROFILE CARD WITH PERFECTLY FRAMED PORTRAIT -->
                 <div class="flex justify-center md:justify-end order-1 md:order-2">
                     <div class="parallax-layer" data-speed="0.04">
                         <div class="glass holo-card hud-corners" id="holo-card-interactive">
                             <!-- Radial glow -->
                             <div class="absolute inset-0 bg-cyan-glow/5 blur-2xl rounded-full"></div>
-                            
+
                             <div class="portrait-container">
                                 <div class="portrait-frame-border"></div>
                                 <div class="portrait-img-wrapper">
-                                    <img src="assets/images/PhotoSelf.png" alt="Aditya Dange - Gameplay Programmer" class="clean-portrait-image" onerror="this.src='assets/images/PhotoSelf.jpg';">
+                                    <img src="assets/Images/PhotoSelf.png" alt="Aditya Dange - Gameplay Programmer" class="clean-portrait-image" onerror="this.src='assets/Images/PhotoSelf.png';">
                                 </div>
                             </div>
 
@@ -608,7 +1242,7 @@
                             <div class="w-10 h-10 border border-cyan-glow/40 flex items-center justify-center bg-cyan-glow/5"><span class="font-orbitron text-cyan-glow text-lg">U</span></div>
                             <h3 class="font-orbitron text-xl text-white tracking-wider">UNITY</h3>
                         </div>
-                        
+
                         <div class="skill-category-header">CORE GAMEPLAY</div>
                         <div class="skill-desc">Building responsive player mechanics, combat interactions and gameplay architecture.</div>
                         <div class="skill-hex-grid">
@@ -617,7 +1251,7 @@
                             <div class="skill-hex-item"><div class="skill-hex-dot expert"></div><span class="skill-hex-name">Gameplay Systems</span></div>
                             <div class="skill-hex-item"><div class="skill-hex-dot expert"></div><span class="skill-hex-name">C# Programming</span></div>
                         </div>
-                        
+
                         <div class="skill-category-header">TECHNICAL SYSTEMS</div>
                         <div class="skill-desc">Reusable architecture, modular workflows and scalable Unity systems.</div>
                         <div class="skill-hex-grid">
@@ -626,7 +1260,7 @@
                             <div class="skill-hex-item"><div class="skill-hex-dot advanced"></div><span class="skill-hex-name">Cinemachine</span></div>
                             <div class="skill-hex-item"><div class="skill-hex-dot advanced"></div><span class="skill-hex-name">Animation Rigging</span></div>
                         </div>
-                        
+
                         <div class="skill-category-header">GAMEPLAY ARCHITECTURE</div>
                         <div class="skill-desc">Procedural level generation using connected rooms, corridors, stairs, special rooms and intelligent spawning systems.</div>
                         <div class="skill-hex-grid">
@@ -637,7 +1271,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Unreal Engine -->
                 <div class="reveal reveal-delay-2">
                     <div class="glass p-6 md:p-8 skill-card h-full">
@@ -646,7 +1280,7 @@
                             <div class="w-10 h-10 border border-purple-glow/40 flex items-center justify-center bg-purple-glow/5"><span class="font-orbitron text-purple-glow text-lg">UE</span></div>
                             <h3 class="font-orbitron text-xl text-white tracking-wider">UNREAL ENGINE</h3>
                         </div>
-                        
+
                         <div class="skill-category-header" style="color: #a855f7;">GAMEPLAY</div>
                         <div class="skill-desc">Gameplay scripting, cinematic flow and interactive gameplay systems.</div>
                         <div class="skill-hex-grid">
@@ -654,7 +1288,7 @@
                             <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:#a855f7;box-shadow:0 0 6px #a855f7;"></div><span class="skill-hex-name">Blueprint Systems</span></div>
                             <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:#a855f7;box-shadow:0 0 6px #a855f7;"></div><span class="skill-hex-name">Sequencer</span></div>
                         </div>
-                        
+
                         <div class="skill-category-header" style="color: #a855f7;">SYSTEMS</div>
                         <div class="skill-desc">Building gameplay foundations and immersive environments.</div>
                         <div class="skill-hex-grid">
@@ -662,7 +1296,7 @@
                             <div class="skill-hex-item"><div class="skill-hex-dot proficient" style="background:rgba(168,85,247,0.65);"></div><span class="skill-hex-name">Landscape & Terrain</span></div>
                             <div class="skill-hex-item"><div class="skill-hex-dot proficient" style="background:rgba(168,85,247,0.65);"></div><span class="skill-hex-name">Environment Design</span></div>
                         </div>
-                        
+
                         <div class="skill-category-header" style="color: #a855f7;">SPECIALIZED</div>
                         <div class="skill-desc">Atmosphere, mood and cinematic presentation.</div>
                         <div class="skill-hex-grid">
@@ -670,7 +1304,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Tools -->
                 <div class="reveal reveal-delay-3">
                     <div class="glass p-6 md:p-8 skill-card h-full">
@@ -679,27 +1313,27 @@
                             <div class="w-10 h-10 border border-hot-pink/40 flex items-center justify-center bg-hot-pink/5"><span class="font-orbitron text-hot-pink text-lg">T</span></div>
                             <h3 class="font-orbitron text-xl text-white tracking-wider">TOOLS</h3>
                         </div>
-                        
+
                         <div class="skill-category-header" style="color: #ff2d95;">VERSION CONTROL</div>
                         <div class="skill-desc">Version control and collaborative development.</div>
                         <div class="skill-hex-grid">
                             <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">Git</span></div>
                             <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">GitHub</span></div>
                         </div>
-                        
+
                         <div class="skill-category-header" style="color: #ff2d95;">IDE</div>
                         <div class="skill-desc">Primary programming and debugging environments.</div>
                         <div class="skill-hex-grid">
                             <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">Visual Studio</span></div>
                             <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:rgba(255,45,149,0.65);"></div><span class="skill-hex-name">VS Code</span></div>
                         </div>
-                        
+
                         <div class="skill-category-header" style="color: #ff2d95;">CONTENT CREATION</div>
                         <div class="skill-desc">Basic modelling and asset preparation.</div>
                         <div class="skill-hex-grid">
                             <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:rgba(255,45,149,0.65);"></div><span class="skill-hex-name">Blender (Basic)</span></div>
                         </div>
-                        
+
                         <div class="skill-category-header" style="color: #ff2d95;">ARCHITECTURE</div>
                         <div class="skill-desc">Writing clean, maintainable and scalable gameplay code.</div>
                         <div class="skill-hex-grid">
@@ -727,10 +1361,10 @@
                     <div class="glass project-card group h-full flex flex-col overflow-hidden border border-white/5">
                         <div class="relative h-64 overflow-hidden">
                             <div class="absolute inset-0 bg-gradient-to-br from-game-surface via-[#0a1a22] to-game-surface group-hover:scale-110 transition-transform duration-700">
-                                <img src="assets/images/Project%20-%20Vanguard.png" alt="Project Vanguard" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
+                                <img src="assets/Images/Project%20-%20Vanguard.png" alt="Project Vanguard" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-game-black via-transparent to-transparent opacity-80"></div>
-                            
+
                             <!-- Project Stats Overlay (Fixed Left) -->
                             <div class="project-stats-overlay stats-unity">
                                 <div class="font-orbitron text-[10px] text-cyan-glow mb-3 tracking-widest uppercase">Technical Stats</div>
@@ -779,10 +1413,10 @@
                     <div class="glass project-card group h-full flex flex-col overflow-hidden border border-white/5">
                         <div class="relative h-64 overflow-hidden">
                             <div class="absolute inset-0 bg-gradient-to-br from-game-surface via-[#1a0f22] to-game-surface group-hover:scale-110 transition-transform duration-700">
-                                <img src="assets/images/Anuja%20Ka%20Badla.png" alt="Anuja Ka Badla" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
+                                <img src="assets/Images/Anuja%20Ka%20Badla.png" alt="Anuja Ka Badla" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-game-black via-transparent to-transparent opacity-80"></div>
-                            
+
                             <!-- Project Stats Overlay (Fixed Left) -->
                             <div class="project-stats-overlay stats-unreal">
                                 <div class="font-orbitron text-[10px] text-purple-glow mb-3 tracking-widest uppercase">Technical Stats</div>
@@ -823,10 +1457,10 @@
                     <div class="glass project-card group h-full flex flex-col overflow-hidden border border-white/5">
                         <div class="relative h-64 overflow-hidden">
                             <div class="absolute inset-0 bg-gradient-to-br from-game-surface via-[#0a1520] to-game-surface group-hover:scale-110 transition-transform duration-700">
-                                <img src="assets/images/The%20Hollow%20Veil.png" alt="The Hollow Veil" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
+                                <img src="assets/Images/The%20Hollow%20Veil.png" alt="The Hollow Veil" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-game-black via-transparent to-transparent opacity-80"></div>
-                            
+
                             <!-- Project Stats Overlay (Fixed Left) -->
                             <div class="project-stats-overlay stats-unreal">
                                 <div class="font-orbitron text-[10px] text-purple-glow mb-3 tracking-widest uppercase">Technical Stats</div>
@@ -867,10 +1501,10 @@
                     <div class="glass project-card group h-full flex flex-col overflow-hidden border border-white/5">
                         <div class="relative h-64 overflow-hidden">
                             <div class="absolute inset-0 bg-gradient-to-br from-game-surface via-[#1a1220] to-game-surface group-hover:scale-110 transition-transform duration-700">
-                                <img src="assets/images/2D%20Platformer.png" alt="2D Platformer" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
+                                <img src="assets/Images/2D%20Platformer.png" alt="2D Platformer" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-game-black via-transparent to-transparent opacity-80"></div>
-                            
+
                             <!-- Project Stats Overlay (Fixed Left) -->
                             <div class="project-stats-overlay stats-unity">
                                 <div class="font-orbitron text-[10px] text-cyan-glow mb-3 tracking-widest uppercase">Technical Stats</div>
@@ -965,7 +1599,7 @@
                         <div class="space-y-6">
                             <div class="flex items-center space-x-4 p-4 bg-white/5 border border-white/5 hover:border-cyan-glow/35 transition-colors group">
                                 <div class="w-12 h-12 border border-cyan-glow/35 flex items-center justify-center group-hover:border-cyan-glow transition-colors bg-cyan-glow/5">
-                                    <svg class="w-5 h-5 text-cyan-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    <svg class="w-5 h-5 text-cyan-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                 </div>
                                 <div>
                                     <p class="font-space text-xs text-game-muted tracking-wider uppercase">Email</p>
@@ -974,7 +1608,7 @@
                             </div>
                             <div class="flex items-center space-x-4 p-4 bg-white/5 border border-white/5 hover:border-purple-glow/35 transition-colors group">
                                 <div class="w-12 h-12 border border-purple-glow/35 flex items-center justify-center group-hover:border-purple-glow transition-colors bg-purple-glow/5">
-                                    <svg class="w-5 h-5 text-purple-glow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                    <svg class="w-5 h-5 text-purple-glow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
                                 </div>
                                 <div>
                                     <p class="font-space text-xs text-game-muted tracking-wider uppercase">GitHub</p>
@@ -987,7 +1621,7 @@
                                 <h3 class="font-orbitron text-lg text-white mb-2 tracking-wider uppercase">Status Report</h3>
                                 <p class="font-inter text-sm text-game-muted mb-4">Available for full-time roles and collaborative projects.</p>
                                 <a href="mailto:aadi.gamedev@gmail.com" target="_blank" class="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-cyan-glow/15 to-purple-glow/10 border border-cyan-glow/50 text-cyan-glow font-space text-sm tracking-wider hover:from-cyan-glow/25 hover:to-purple-glow/20 transition-all neon-btn">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
                                     <span>SEND MESSAGE</span>
                                 </a>
                             </div>
@@ -1007,8 +1641,8 @@
                     <span class="font-orbitron text-sm tracking-widest text-white/60">ADITYA DANGE // GAMEPLAY PROGRAMMER</span>
                 </div>
                 <div class="flex items-center space-x-6">
-                    <a href="https://github.com/aadigamedev37" target="_blank" class="text-game-muted hover:text-cyan-glow transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
-                    <a href="https://linkedin.com/in/adityadange-dev" target="_blank" class="text-game-muted hover:text-electric-blue transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                    <a href="https://github.com/aadigamedev37" target="_blank" class="text-game-muted hover:text-cyan-glow transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg></a>
+                    <a href="https://linkedin.com/in/adityadange-dev" target="_blank" class="text-game-muted hover:text-electric-blue transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg></a>
                 </div>
                 <p class="font-space text-xs text-game-muted tracking-wider uppercase">© 2026 All Systems Operational</p>
             </div>
@@ -1017,7 +1651,7 @@
 
     <!-- TERMINAL WINDOW -->
     <div id="terminal-btn" title="Open Terminal">
-        <svg class="w-6 h-6 text-cyan-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <svg class="w-6 h-6 text-cyan-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
     </div>
 
     <div id="terminal-window">
@@ -1061,52 +1695,52 @@
     <!-- Scripts -->
     <script>
         const projectsData = {
-            vanguard: {
-                title: "PROJECT VANGUARD",
-                media: [
-                    { type: 'video', src: 'assets/videos/Project - Vanguard.mp4', label: 'Gameplay Intel 01' },
-                    { type: 'image', src: 'assets/images/Project%20-%20Vanguard.png', label: 'Architecture View' }
-                ]
-            },
-            anuja: {
-                title: "ANUJA KA BADLA",
-                media: [
-                    { type: 'video', src: 'assets/videos/Anuja Ka Badla.mp4', label: 'Cinematic Intel' },
-                    { type: 'image', src: 'assets/images/Anuja%20Ka%20Badla.png', label: 'Quest Logic' }
-                ]
-            },
-            hollow: {
-                title: "THE HOLLOW VEIL",
-                media: [
-                    { type: 'video', src: 'assets/videos/The Hollow Veil .mp4', label: 'Atmosphere Intel' },
-                    { type: 'image', src: 'assets/images/The%20Hollow%20Veil.png', label: 'Visuals' }
-                ]
-            },
-            platformer: {
-                title: "2D PLATFORMER",
-                media: [
-                    { type: 'video', src: 'assets/videos/2D Platformer.mp4', label: 'Physics Intel' },
-                    { type: 'image', src: 'assets/images/2D%20Platformer.png', label: 'Level Design' }
-                ]
-            }
+        vanguard: {
+        title: "PROJECT VANGUARD",
+        media: [
+        { type: 'video', src: 'assets/videos/Project - Vanguard.mp4', label: 'Gameplay Intel 01' },
+        { type: 'image', src: 'assets/Images/Project%20-%20Vanguard.png', label: 'Architecture View' }
+        ]
+        },
+        anuja: {
+        title: "ANUJA KA BADLA",
+        media: [
+        { type: 'video', src: 'assets/videos/Anuja Ka Badla.mp4', label: 'Cinematic Intel' },
+        { type: 'image', src: 'assets/Images/Anuja%20Ka%20Badla.png', label: 'Quest Logic' }
+        ]
+        },
+        hollow: {
+        title: "THE HOLLOW VEIL",
+        media: [
+        { type: 'video', src: 'assets/videos/The Hollow Veil .mp4', label: 'Atmosphere Intel' },
+        { type: 'image', src: 'assets/Images/The%20Hollow%20Veil.png', label: 'Visuals' }
+        ]
+        },
+        platformer: {
+        title: "2D PLATFORMER",
+        media: [
+        { type: 'video', src: 'assets/videos/2D Platformer.mp4', label: 'Physics Intel' },
+        { type: 'image', src: 'assets/Images/2D%20Platformer.png', label: 'Level Design' }
+        ]
+        }
         };
 
         // LOADING SCREEN
         const bootLines = [
-            { text: "INITIALIZING AD_CORE_ENGINE v6.0.2...", class: "" },
-            { text: "LOADING GAMEPLAY SYSTEMS...", class: "process" },
-            { text: "PLAYER_CONTROLLER: OK", class: "success" },
-            { text: "INVENTORY_SYSTEM: OK", class: "success" },
-            { text: "AI_BEHAVIOR_TREES: OK", class: "success" },
-            { text: "COMPILING SHADERS...", class: "process" },
-            { text: "VERTEX_SHADERS: 1024 COMPILED", class: "success" },
-            { text: "FRAGMENT_SHADERS: 2048 COMPILED", class: "success" },
-            { text: "LOADING ASSETS...", class: "process" },
-            { text: "TEXTURES: 512MB LOADED", class: "success" },
-            { text: "MODELS: 128MB LOADED", class: "success" },
-            { text: "CONNECTING UI...", class: "process" },
-            { text: "HUD_INTERFACE: READY", class: "success" },
-            { text: "PORTFOLIO READY.", class: "success" }
+        { text: "INITIALIZING AD_CORE_ENGINE v6.0.2...", class: "" },
+        { text: "LOADING GAMEPLAY SYSTEMS...", class: "process" },
+        { text: "PLAYER_CONTROLLER: OK", class: "success" },
+        { text: "INVENTORY_SYSTEM: OK", class: "success" },
+        { text: "AI_BEHAVIOR_TREES: OK", class: "success" },
+        { text: "COMPILING SHADERS...", class: "process" },
+        { text: "VERTEX_SHADERS: 1024 COMPILED", class: "success" },
+        { text: "FRAGMENT_SHADERS: 2048 COMPILED", class: "success" },
+        { text: "LOADING ASSETS...", class: "process" },
+        { text: "TEXTURES: 512MB LOADED", class: "success" },
+        { text: "MODELS: 128MB LOADED", class: "success" },
+        { text: "CONNECTING UI...", class: "process" },
+        { text: "HUD_INTERFACE: READY", class: "success" },
+        { text: "PORTFOLIO READY.", class: "success" }
         ];
 
         const bootSequence = document.getElementById('boot-sequence');
@@ -1116,28 +1750,28 @@
 
         let bootIdx = 0;
         function playBootSequence() {
-            if (bootIdx < bootLines.length) {
-                const line = document.createElement('div');
-                line.className = `boot-line ${bootLines[bootIdx].class}`;
-                line.textContent = `> ${bootLines[bootIdx].text}`;
-                bootSequence.appendChild(line);
-                const progress = ((bootIdx + 1) / bootLines.length) * 100;
-                loadingBarFill.style.width = `${progress}%`;
-                loadingText.textContent = `${Math.floor(progress)}%`;
-                bootIdx++;
-                setTimeout(playBootSequence, Math.random() * 180 + 90);
-            } else {
-                setTimeout(() => {
-                    loadingScreen.classList.add('hidden');
-                    document.body.style.overflow = 'auto';
-                    unlockAchievement('first_contact', '🏆 First Contact', 'Visited portfolio');
-                }, 750);
-            }
+        if (bootIdx < bootLines.length) {
+        const line = document.createElement('div');
+        line.className = `boot-line ${bootLines[bootIdx].class}`;
+        line.textContent = `> ${bootLines[bootIdx].text}`;
+        bootSequence.appendChild(line);
+        const progress = ((bootIdx + 1) / bootLines.length) * 100;
+        loadingBarFill.style.width = `${progress}%`;
+        loadingText.textContent = `${Math.floor(progress)}%`;
+        bootIdx++;
+        setTimeout(playBootSequence, Math.random() * 180 + 90);
+        } else {
+        setTimeout(() => {
+        loadingScreen.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+        unlockAchievement('first_contact', '🏆 First Contact', 'Visited portfolio');
+        }, 750);
+        }
         }
 
         window.addEventListener('load', () => {
-            document.body.style.overflow = 'hidden';
-            playBootSequence();
+        document.body.style.overflow = 'hidden';
+        playBootSequence();
         });
 
         // XP SCROLL BAR
@@ -1147,28 +1781,28 @@
         const xpLevel = document.getElementById('xp-level');
 
         window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
 
-            if (winScroll > 100) xpBar.classList.add('visible');
-            else xpBar.classList.remove('visible');
+        if (winScroll > 100) xpBar.classList.add('visible');
+        else xpBar.classList.remove('visible');
 
-            xpFill.style.width = scrolled + "%";
-            xpPercent.textContent = Math.floor(scrolled) + "%";
+        xpFill.style.width = scrolled + "%";
+        xpPercent.textContent = Math.floor(scrolled) + "%";
 
-            if (scrolled < 25) {
-                xpLevel.textContent = "LVL 1 EXPLORER";
-            } else if (scrolled < 50) {
-                xpLevel.textContent = "LVL 2 ARCHITECT";
-                unlockAchievement('system_architect', '🏆 System Architect', 'Reached Skills');
-            } else if (scrolled < 99) {
-                xpLevel.textContent = "LVL 3 VANGUARD";
-            } else {
-                xpLevel.textContent = "MAX LEVEL REACHED";
-                xpFill.classList.add('complete');
-                unlockAchievement('full_clear', '🏆 Full Clear', 'Reached footer');
-            }
+        if (scrolled < 25) {
+        xpLevel.textContent = "LVL 1 EXPLORER";
+        } else if (scrolled < 50) {
+        xpLevel.textContent = "LVL 2 ARCHITECT";
+        unlockAchievement('system_architect', '🏆 System Architect', 'Reached Skills');
+        } else if (scrolled < 99) {
+        xpLevel.textContent = "LVL 3 VANGUARD";
+        } else {
+        xpLevel.textContent = "MAX LEVEL REACHED";
+        xpFill.classList.add('complete');
+        unlockAchievement('full_clear', '🏆 Full Clear', 'Reached footer');
+        }
         });
 
         // ACHIEVEMENT SYSTEM
@@ -1176,22 +1810,22 @@
         const unlockedAchievements = new Set();
 
         function unlockAchievement(id, title, desc) {
-            if (unlockedAchievements.has(id)) return;
-            unlockedAchievements.add(id);
-            const toast = document.createElement('div');
-            toast.className = 'achievement-toast';
-            toast.innerHTML = `
-                <div class="achievement-icon">🏆</div>
-                <div>
-                    <div class="achievement-title">${title}</div>
-                    <div class="achievement-desc">${desc}</div>
-                </div>
-            `;
-            achievementContainer.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.add('hiding');
-                setTimeout(() => toast.remove(), 500);
-            }, 4000);
+        if (unlockedAchievements.has(id)) return;
+        unlockedAchievements.add(id);
+        const toast = document.createElement('div');
+        toast.className = 'achievement-toast';
+        toast.innerHTML = `
+        <div class="achievement-icon">🏆</div>
+        <div>
+        <div class="achievement-title">${title}</div>
+        <div class="achievement-desc">${desc}</div>
+        </div>
+        `;
+        achievementContainer.appendChild(toast);
+        setTimeout(() => {
+        toast.classList.add('hiding');
+        setTimeout(() => toast.remove(), 500);
+        }, 4000);
         }
 
         // TERMINAL
@@ -1202,86 +1836,86 @@
         const terminalBody = document.getElementById('terminal-body');
 
         terminalBtn.addEventListener('click', () => {
-            terminalWindow.classList.toggle('open');
-            terminalBtn.classList.toggle('active');
-            if (terminalWindow.classList.contains('open')) terminalInput.focus();
+        terminalWindow.classList.toggle('open');
+        terminalBtn.classList.toggle('active');
+        if (terminalWindow.classList.contains('open')) terminalInput.focus();
         });
 
         terminalClose.addEventListener('click', () => {
-            terminalWindow.classList.remove('open');
-            terminalBtn.classList.remove('active');
+        terminalWindow.classList.remove('open');
+        terminalBtn.classList.remove('active');
         });
 
         terminalInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const cmd = terminalInput.value.toLowerCase().trim();
-                handleCommand(cmd);
-                terminalInput.value = '';
-            }
+        if (e.key === 'Enter') {
+        const cmd = terminalInput.value.toLowerCase().trim();
+        handleCommand(cmd);
+        terminalInput.value = '';
+        }
         });
 
         function handleCommand(cmd) {
-            if (!cmd) return;
-            const line = document.createElement('div');
-            line.className = 'terminal-line';
-            line.innerHTML = `<span class="terminal-prompt">></span> ${cmd}`;
-            terminalBody.insertBefore(line, terminalInput.parentElement);
+        if (!cmd) return;
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+        line.innerHTML = `<span class="terminal-prompt">></span> ${cmd}`;
+        terminalBody.insertBefore(line, terminalInput.parentElement);
 
-            const output = document.createElement('div');
-            output.className = 'terminal-line terminal-output';
+        const output = document.createElement('div');
+        output.className = 'terminal-line terminal-output';
 
-            switch(cmd) {
-                case 'help':
-                    output.innerHTML = 'Available commands: help, whoami, skills, projects, contact, github, linkedin, resume, clear';
-                    break;
-                case 'whoami':
-                    output.innerHTML = 'ADITYA DANGE // Gameplay Programmer specializing in Unity & Unreal Engine.';
-                    break;
-                case 'skills':
-                    output.innerHTML = 'Unity, Unreal Engine, C#, C++, AI, Procedural Generation, Systems Architecture.';
-                    break;
-                case 'projects':
-                    output.innerHTML = 'Project Vanguard, Anuja Ka Badla, The Hollow Veil, 2D Platformer.';
-                    break;
-                case 'contact':
-                    output.innerHTML = 'Email: aadi.gamedev@gmail.com';
-                    break;
-                case 'github':
-                    output.innerHTML = 'Opening GitHub...';
-                    window.open('https://github.com/aadigamedev37', '_blank');
-                    break;
-                case 'linkedin':
-                    output.innerHTML = 'Opening LinkedIn...';
-                    window.open('https://linkedin.com/in/adityadange-dev', '_blank');
-                    break;
-                case 'resume':
-                    output.innerHTML = 'Opening HTML Resume...';
-                    unlockAchievement('intel_secured', '🏆 Intel Secured', 'Opened Resume');
-                    window.open('assets/resume/Aditya_Dange_Resume_Updated.html', '_blank');
-                    break;
-                case 'clear':
-                    terminalBody.innerHTML = '';
-                    terminalBody.appendChild(terminalInput.parentElement);
-                    return;
-                case 'sudo':
-                    output.innerHTML = '<span class="terminal-error">Access Denied. This incident will be reported.</span>';
-                    unlockAchievement('hacker_man', '💻 Hacker Man', 'Tried to use sudo privileges');
-                    break;
-                case 'konami':
-                    output.innerHTML = '<span class="terminal-success">Cheat activated: Infinite Logic loops acquired.</span>';
-                    unlockAchievement('code_breaker', '🎮 Code Breaker', 'You found a secret command');
-                    break;
-                case 'matrix':
-                    document.body.classList.toggle('matrix-mode');
-                    output.innerHTML = document.body.classList.contains('matrix-mode') ? 
-                        '<span class="terminal-success">Wake up, Neo...</span>' : 
-                        '<span class="terminal-output">Returning to default reality.</span>';
-                    break;
-                default:
-                    output.innerHTML = `<span class="terminal-error">Unknown command: ${cmd}. Type 'help' for assistance.</span>`;
-            }
-            terminalBody.insertBefore(output, terminalInput.parentElement);
-            terminalBody.scrollTop = terminalBody.scrollHeight;
+        switch(cmd) {
+        case 'help':
+        output.innerHTML = 'Available commands: help, whoami, skills, projects, contact, github, linkedin, resume, clear';
+        break;
+        case 'whoami':
+        output.innerHTML = 'ADITYA DANGE // Gameplay Programmer specializing in Unity & Unreal Engine.';
+        break;
+        case 'skills':
+        output.innerHTML = 'Unity, Unreal Engine, C#, C++, AI, Procedural Generation, Systems Architecture.';
+        break;
+        case 'projects':
+        output.innerHTML = 'Project Vanguard, Anuja Ka Badla, The Hollow Veil, 2D Platformer.';
+        break;
+        case 'contact':
+        output.innerHTML = 'Email: aadi.gamedev@gmail.com';
+        break;
+        case 'github':
+        output.innerHTML = 'Opening GitHub...';
+        window.open('https://github.com/aadigamedev37', '_blank');
+        break;
+        case 'linkedin':
+        output.innerHTML = 'Opening LinkedIn...';
+        window.open('https://linkedin.com/in/adityadange-dev', '_blank');
+        break;
+        case 'resume':
+        output.innerHTML = 'Opening HTML Resume...';
+        unlockAchievement('intel_secured', '🏆 Intel Secured', 'Opened Resume');
+        window.open('assets/Resume/Aditya_Dange_Resume_Updated.html', '_blank');
+        break;
+        case 'clear':
+        terminalBody.innerHTML = '';
+        terminalBody.appendChild(terminalInput.parentElement);
+        return;
+        case 'sudo':
+        output.innerHTML = '<span class="terminal-error">Access Denied. This incident will be reported.</span>';
+        unlockAchievement('hacker_man', '💻 Hacker Man', 'Tried to use sudo privileges');
+        break;
+        case 'konami':
+        output.innerHTML = '<span class="terminal-success">Cheat activated: Infinite Logic loops acquired.</span>';
+        unlockAchievement('code_breaker', '🎮 Code Breaker', 'You found a secret command');
+        break;
+        case 'matrix':
+        document.body.classList.toggle('matrix-mode');
+        output.innerHTML = document.body.classList.contains('matrix-mode') ?
+        '<span class="terminal-success">Wake up, Neo...</span>' :
+        '<span class="terminal-output">Returning to default reality.</span>';
+        break;
+        default:
+        output.innerHTML = `<span class="terminal-error">Unknown command: ${cmd}. Type 'help' for assistance.</span>`;
+        }
+        terminalBody.insertBefore(output, terminalInput.parentElement);
+        terminalBody.scrollTop = terminalBody.scrollHeight;
         }
 
         // Draggable Terminal
@@ -1292,18 +1926,18 @@
         document.addEventListener('mouseup', dragEnd);
 
         function dragStart(e) {
-            initialX = e.clientX - xOffset;
-            initialY = e.clientY - yOffset;
-            if (e.target === terminalHeader || e.target.parentElement === terminalHeader) isDragging = true;
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+        if (e.target === terminalHeader || e.target.parentElement === terminalHeader) isDragging = true;
         }
         function drag(e) {
-            if (isDragging) {
-                e.preventDefault();
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-                xOffset = currentX; yOffset = currentY;
-                terminalWindow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-            }
+        if (isDragging) {
+        e.preventDefault();
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        xOffset = currentX; yOffset = currentY;
+        terminalWindow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+        }
         }
         function dragEnd() { initialX = currentX; initialY = currentY; isDragging = false; }
 
@@ -1320,94 +1954,94 @@
         const mediaStatus = document.getElementById('media-status');
 
         document.querySelectorAll('.gallery-trigger').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const projectId = btn.getAttribute('data-project');
-                openGallery(projectId);
-                if (projectId === 'vanguard') unlockAchievement('vanguard_explorer', '🏆 Vanguard Explorer', 'Viewed Project Vanguard');
-            });
+        btn.addEventListener('click', () => {
+        const projectId = btn.getAttribute('data-project');
+        openGallery(projectId);
+        if (projectId === 'vanguard') unlockAchievement('vanguard_explorer', '🏆 Vanguard Explorer', 'Viewed Project Vanguard');
+        });
         });
 
         modalClose.addEventListener('click', () => {
-            videoModal.classList.remove('open');
-            mainVideo.pause();
+        videoModal.classList.remove('open');
+        mainVideo.pause();
         });
 
         muteBtn.addEventListener('click', () => {
-            mainVideo.muted = !mainVideo.muted;
-            updateMuteUI();
+        mainVideo.muted = !mainVideo.muted;
+        updateMuteUI();
         });
 
         function updateMuteUI() {
-            if (mainVideo.muted) {
-                muteText.textContent = 'UNMUTE';
-                muteIcon.innerHTML = '<path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.73 4.5a1 1 0 011.414 0 9.972 9.972 0 012.929 7.071 1 1 0 01-1.414 1.414A7.971 7.971 0 0013 10a7.971 7.971 0 00-2.343-5.657 1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path><path stroke="#ff6b6b" stroke-width="2" d="M3 3l14 14"></path>';
-            } else {
-                muteText.textContent = 'MUTE';
-                muteIcon.innerHTML = '<path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path>';
-            }
+        if (mainVideo.muted) {
+        muteText.textContent = 'UNMUTE';
+        muteIcon.innerHTML = '<path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.73 4.5a1 1 0 011.414 0 9.972 9.972 0 012.929 7.071 1 1 0 01-1.414 1.414A7.971 7.971 0 0013 10a7.971 7.971 0 00-2.343-5.657 1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path><path stroke="#ff6b6b" stroke-width="2" d="M3 3l14 14"></path>';
+        } else {
+        muteText.textContent = 'MUTE';
+        muteIcon.innerHTML = '<path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path>';
+        }
         }
 
         function openGallery(projectId) {
-            const data = projectsData[projectId];
-            if (!data) return;
-            modalTitle.textContent = data.title + " // INTEL";
-            galleryThumbs.innerHTML = '';
-            data.media.forEach((item, index) => {
-                const thumb = document.createElement('div');
-                thumb.className = `gallery-thumb ${index === 0 ? 'active' : ''}`;
-                if (item.type === 'video') {
-                    thumb.innerHTML = `<video src="${item.src}"></video><div class="thumb-label">${item.label}</div>`;
-                } else {
-                    thumb.innerHTML = `<img src="${item.src}" alt="${item.label}"><div class="thumb-label">${item.label}</div>`;
-                }
-                thumb.addEventListener('click', () => {
-                    document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
-                    thumb.classList.add('active');
-                    loadMedia(item);
-                });
-                galleryThumbs.appendChild(thumb);
-            });
-            loadMedia(data.media[0]);
-            videoModal.classList.add('open');
+        const data = projectsData[projectId];
+        if (!data) return;
+        modalTitle.textContent = data.title + " // INTEL";
+        galleryThumbs.innerHTML = '';
+        data.media.forEach((item, index) => {
+        const thumb = document.createElement('div');
+        thumb.className = `gallery-thumb ${index === 0 ? 'active' : ''}`;
+        if (item.type === 'video') {
+        thumb.innerHTML = `<video src="${item.src}"></video><div class="thumb-label">${item.label}</div>`;
+        } else {
+        thumb.innerHTML = `<img src="${item.src}" alt="${item.label}"><div class="thumb-label">${item.label}</div>`;
+        }
+        thumb.addEventListener('click', () => {
+        document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+        loadMedia(item);
+        });
+        galleryThumbs.appendChild(thumb);
+        });
+        loadMedia(data.media[0]);
+        videoModal.classList.add('open');
         }
 
         function loadMedia(item) {
-            mediaStatus.textContent = `Displaying: ${item.label}`;
-            if (item.type === 'video') {
-                mainImage.style.display = 'none';
-                mainVideo.style.display = 'block';
-                mainVideo.src = item.src;
-                mainVideo.play();
-                muteBtn.style.display = 'flex';
-            } else {
-                mainVideo.pause();
-                mainVideo.style.display = 'none';
-                muteBtn.style.display = 'none';
-                mainImage.style.display = 'block';
-                mainImage.src = item.src;
-            }
+        mediaStatus.textContent = `Displaying: ${item.label}`;
+        if (item.type === 'video') {
+        mainImage.style.display = 'none';
+        mainVideo.style.display = 'block';
+        mainVideo.src = item.src;
+        mainVideo.play();
+        muteBtn.style.display = 'flex';
+        } else {
+        mainVideo.pause();
+        mainVideo.style.display = 'none';
+        muteBtn.style.display = 'none';
+        mainImage.style.display = 'block';
+        mainImage.src = item.src;
+        }
         }
 
         // Mouse Spotlight
         window.addEventListener('mousemove', e => {
-            document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
-            document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+        document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+        document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
         });
 
         // Interactive Hologram 3D Tilt & Parallax Effect
         const holoCardInteractive = document.getElementById('holo-card-interactive');
         if (holoCardInteractive) {
-            holoCardInteractive.addEventListener('mousemove', (e) => {
-                const rect = holoCardInteractive.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                const rotateX = (-y / (rect.height / 2)) * 12;
-                const rotateY = (x / (rect.width / 2)) * 12;
-                holoCardInteractive.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            });
-            holoCardInteractive.addEventListener('mouseleave', () => {
-                holoCardInteractive.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-            });
+        holoCardInteractive.addEventListener('mousemove', (e) => {
+        const rect = holoCardInteractive.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const rotateX = (-y / (rect.height / 2)) * 12;
+        const rotateY = (x / (rect.width / 2)) * 12;
+        holoCardInteractive.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        holoCardInteractive.addEventListener('mouseleave', () => {
+        holoCardInteractive.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
         }
 
         // Particle Canvas - multi-color
@@ -1415,74 +2049,74 @@
         const ctx = canvas.getContext('2d');
         let particles = [];
         const particleColors = [
-            'rgba(0, 229, 255, ',
-            'rgba(168, 85, 247, ',
-            'rgba(255, 45, 149, ',
-            'rgba(57, 255, 20, ',
-            'rgba(34, 211, 238, '
+        'rgba(0, 229, 255, ',
+        'rgba(168, 85, 247, ',
+        'rgba(255, 45, 149, ',
+        'rgba(57, 255, 20, ',
+        'rgba(34, 211, 238, '
         ];
 
         function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         }
         window.addEventListener('resize', resize);
         resize();
 
         class Particle {
-            constructor() { this.reset(); }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2.2 + 0.4;
-                this.speedX = (Math.random() - 0.5) * 0.55;
-                this.speedY = (Math.random() - 0.5) * 0.55;
-                this.alpha = Math.random() * 0.55 + 0.12;
-                this.color = particleColors[Math.floor(Math.random() * particleColors.length)];
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-            }
-            draw() {
-                const isMatrix = document.body.classList.contains('matrix-mode');
-                ctx.fillStyle = isMatrix ? `rgba(0, 255, 65, ${this.alpha})` : this.color + this.alpha + ')';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
+        constructor() { this.reset(); }
+        reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2.2 + 0.4;
+        this.speedX = (Math.random() - 0.5) * 0.55;
+        this.speedY = (Math.random() - 0.5) * 0.55;
+        this.alpha = Math.random() * 0.55 + 0.12;
+        this.color = particleColors[Math.floor(Math.random() * particleColors.length)];
+        }
+        update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+        }
+        draw() {
+        const isMatrix = document.body.classList.contains('matrix-mode');
+        ctx.fillStyle = isMatrix ? `rgba(0, 255, 65, ${this.alpha})` : this.color + this.alpha + ')';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        }
         }
 
         for (let i = 0; i < 65; i++) particles.push(new Particle());
 
         function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
         }
         animate();
 
         // Scroll Reveal
         const reveals = document.querySelectorAll('.reveal');
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
-            });
+        entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+        });
         }, { threshold: 0.12 });
         reveals.forEach(el => observer.observe(el));
 
         // Click Energy Burst
         window.addEventListener('mousedown', e => {
-            const burst = document.createElement('div');
-            burst.className = 'energy-burst';
-            burst.style.left = `${e.clientX}px`;
-            burst.style.top = `${e.clientY}px`;
-            if (document.body.classList.contains('matrix-mode')) {
-                burst.style.background = 'radial-gradient(circle, rgba(0,255,65,0.4) 0%, transparent 70%)';
-            }
-            document.body.appendChild(burst);
-            setTimeout(() => burst.remove(), 550);
+        const burst = document.createElement('div');
+        burst.className = 'energy-burst';
+        burst.style.left = `${e.clientX}px`;
+        burst.style.top = `${e.clientY}px`;
+        if (document.body.classList.contains('matrix-mode')) {
+        burst.style.background = 'radial-gradient(circle, rgba(0,255,65,0.4) 0%, transparent 70%)';F
+        }
+        document.body.appendChild(burst);
+        setTimeout(() => burst.remove(), 550);
         });
 
         // Mobile menu
@@ -1492,7 +2126,7 @@
         if (mobileBtn) mobileBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
         if (mobileClose) mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
         document.querySelectorAll('#mobile-menu a').forEach(a => {
-            a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        a.addEventListener('click', () => mobileMenu.classList.remove('open'));
         });
     </script>
 </body>
