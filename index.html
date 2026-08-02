@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditya Dange | Gameplay Programmer</title>
+    <meta name="description" content="Aditya Dange - Gameplay Programmer specializing in Unity and Unreal Engine. Building gameplay systems, combat mechanics, procedural generation, and AI behaviors.">
+    <meta name="keywords" content="Gameplay Programmer, Unity Developer, Unreal Engine Developer, Aditya Dange, Game Development, C#, C++">
+    <meta name="author" content="Aditya Dange">
+    <meta property="og:title" content="Aditya Dange | Gameplay Programmer">
+    <meta property="og:description" content="Gameplay Programmer specializing in Unity and Unreal Engine.">
+    <meta property="og:type" content="website">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'space': ['Space Grotesk', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        'game-black': '#030308',
+                        'game-charcoal': '#08080f',
+                        'game-gunmetal': '#0f0f18',
+                        'game-surface': '#161622',
+                        'game-border': '#2a2a3f',
+                        'cyan-glow': '#00e5ff',
+                        'purple-glow': '#a855f7',
+                        'electric-blue': '#22d3ee',
+                        'neon-green': '#39ff14',
+                        'hot-pink': '#ff2d95',
+                        'amber-glow': '#ffb020',
+                        'magenta': '#ff00aa',
+                        'lime': '#b8ff3c',
+                        'game-text': '#e8e8f0',
+                        'game-muted': '#8b9bb8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --cyan: #00e5ff;
+            --purple: #a855f7;
+            --blue: #22d3ee;
+            --green: #39ff14;
+            --pink: #ff2d95;
+            --amber: #ffb020;
+            --magenta: #ff00aa;
+            --bg: #030308;
+            --surface: #0f0f18;
+        }
+        
+        body.matrix-mode {
+            --cyan: #00ff41;
+            --purple: #008f11;
+            --blue: #00ff41;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif; background: var(--bg); color: #e8e8f0;
+            overflow-x: hidden; cursor: crosshair;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #08080f; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--cyan), var(--purple)); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, var(--pink), var(--amber)); }
+        ::selection { background: rgba(0, 229, 255, 0.35); color: #fff; }
+
+        .scanlines {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999; opacity: 0.035;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.35) 2px, rgba(0,0,0,0.35) 4px);
+        }
+
+        .bg-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .bg-gradient-anim {
+            background:
+                radial-gradient(ellipse at 15% 40%, rgba(0,229,255,0.12) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 15%, rgba(168,85,247,0.10) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 85%, rgba(255,45,149,0.07) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(57,255,20,0.04) 0%, transparent 40%);
+            animation: bgShift 18s ease-in-out infinite alternate;
+        }
+        @keyframes bgShift {
+            0% { transform: scale(1) translate(0,0); }
+            50% { transform: scale(1.12) translate(-3%,2%); }
+            100% { transform: scale(1) translate(3%,-2%); }
+        }
+        .light-rays {
+            background: conic-gradient(from 180deg at 50% 50%,
+                transparent 0deg, rgba(0,229,255,0.04) 50deg, transparent 100deg,
+                rgba(168,85,247,0.035) 160deg, transparent 220deg,
+                rgba(255,45,149,0.03) 280deg, transparent 340deg);
+            animation: rayRotate 40s linear infinite;
+        }
+        @keyframes rayRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .grid-bg {
+            opacity: 0.14;
+            background-image: linear-gradient(rgba(0,229,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.12) 1px, transparent 1px);
+            background-size: 55px 55px;
+            transform: perspective(500px) rotateX(60deg); transform-origin: center top;
+            animation: gridMove 22s linear infinite;
+        }
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(55px); }
+        }
+        .hex-float {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2300e5ff' fill-opacity='0.03'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-7.5L27.99 34H28v2.31h-.01L17 42.65V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: hexDrift 28s linear infinite;
+        }
+        @keyframes hexDrift { 0% { transform: translateY(0); } 100% { transform: translateY(-49px); } }
+        .energy-fog {
+            background: radial-gradient(circle at 25% 70%, rgba(0,229,255,0.06) 0%, transparent 40%),
+                        radial-gradient(circle at 75% 25%, rgba(168,85,247,0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 50%, rgba(255,45,149,0.03) 0%, transparent 50%);
+            animation: fogMove 22s ease-in-out infinite alternate;
+        }
+        @keyframes fogMove { 0% { opacity: 0.55; transform: translateX(-6%); } 100% { opacity: 1; transform: translateX(6%); } }
+
+        #particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .spotlight {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 2;
+            background: radial-gradient(circle 520px at var(--mouse-x,50%) var(--mouse-y,50%), rgba(0,229,255,0.07), transparent 70%);
+        }
+
+        .glass {
+            background: rgba(15,15,24,0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .glass-strong {
+            background: rgba(8,8,15,0.92); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(0,229,255,0.18);
+        }
+
+        .hud-corners { position: relative; }
+        .hud-corners::before, .hud-corners::after {
+            content: ''; position: absolute; width: 22px; height: 22px;
+            border: 2px solid var(--cyan); opacity: 0.55; transition: all 0.3s ease;
+        }
+        .hud-corners::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .hud-corners::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+        .section-title {
+            font-family: 'Orbitron', sans-serif; position: relative; display: inline-block; letter-spacing: 0.15em; text-transform: uppercase;
+        }
+        .section-title::before {
+            content: ''; position: absolute; left: 0; bottom: -10px; width: 70px; height: 3px;
+            background: linear-gradient(90deg, var(--cyan), var(--pink), transparent);
+        }
+
+        .neon-btn {
+            position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.4,0,0.2,1); border: 1px solid rgba(0,229,255,0.35);
+        }
+        .neon-btn:hover {
+            border-color: var(--cyan); box-shadow: 0 0 28px rgba(0,229,255,0.3); transform: translateY(-3px);
+        }
+
+        /* ============================================
+            CYBERPUNK UI PROFILE CARD & PERFECTLY FRAMED PORTRAIT
+            ============================================ */
+        .holo-card {
+            background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0,212,255,0.25);
+            padding: 32px 24px 24px;
+            display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 0 45px rgba(0,212,255,0.08), inset 0 0 25px rgba(0,212,255,0.03);
+            animation: profileFloat 6s ease-in-out infinite;
+            position: relative; z-index: 2;
+            width: 320px;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+        .holo-card::before {
+            content: ''; position: absolute; inset: -1px;
+            border: 1px solid rgba(0,212,255,0.45);
+            pointer-events: none;
+            animation: cardPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes cardPulse {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(1.02); }
+        }
+
+        .portrait-container {
+            position: relative;
+            width: 240px;
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #08080f;
+        }
+
+        .portrait-frame-border {
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(0, 229, 255, 0.4);
+            background: linear-gradient(180deg, rgba(0,229,255,0.02) 0%, rgba(168,85,247,0.04) 100%);
+            box-shadow: inset 0 0 25px rgba(0,229,255,0.15), 0 0 15px rgba(0,229,255,0.1);
+            clip-path: polygon(0 15px, 15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .portrait-img-wrapper {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            z-index: 2;
+            padding: 0;
+        }
+
+        .clean-portrait-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 15%;
+            filter: contrast(1.05) brightness(1.02) saturate(1.05);
+            display: block;
+        }
+
+        @keyframes profileFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+        .skill-card { position: relative; overflow: hidden; transition: all 0.4s ease; border: 1px solid rgba(255,255,255,0.05); }
+        .skill-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-6px); }
+        .skill-category-header { font-family: 'Orbitron', sans-serif; font-size: 10px; color: var(--cyan); letter-spacing: 0.15em; margin-top: 12px; }
+        .skill-desc { font-family: 'Space Grotesk', sans-serif; font-size: 9.5px; color: var(--game-muted); margin-bottom: 10px; }
+        .skill-hex-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
+        .skill-hex-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 8px 10px; display: flex; align-items: center; gap: 8px; }
+        .skill-hex-dot { width: 6px; height: 6px; border-radius: 50%; }
+        .skill-hex-dot.expert { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+        .skill-hex-dot.advanced { background: rgba(0,212,255,0.6); }
+        .skill-hex-dot.proficient { background: rgba(0,212,255,0.3); }
+
+        .project-card { position: relative; overflow: hidden; transition: all 0.5s ease; }
+        .project-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.45); }
+        .project-stats-overlay {
+            position: absolute; top: 0; left: 0; z-index: 10; background: rgba(3,3,8,0.93); backdrop-filter: blur(10px);
+            padding: 12px 16px; opacity: 0; pointer-events: none; transition: all 0.4s ease; border-bottom-right-radius: 12px; transform: translateX(-15px) translateY(-15px);
+        }
+        .project-card:hover .project-stats-overlay { opacity: 1; transform: translateX(0) translateY(0); pointer-events: auto; }
+        .stat-row { display: flex; align-items: center; gap: 12px; width: 150px; margin-bottom: 8px; }
+        .stat-label { font-family: 'Space Grotesk', sans-serif; font-size: 9px; color: var(--game-muted); width: 70px; }
+        .stat-track { flex: 1; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+        .stat-fill { height: 100%; width: 0%; border-radius: 3px; transition: width 1s ease 0.2s; }
+        .project-card:hover .stat-fill { width: var(--stat-width); }
+        .stat-fill.cyan { background: linear-gradient(90deg, var(--cyan), var(--blue)); }
+        .stat-fill.purple { background: linear-gradient(90deg, var(--purple), var(--pink)); }
+        .stat-fill.green { background: linear-gradient(90deg, var(--green), var(--cyan)); }
+        .stat-fill.amber { background: linear-gradient(90deg, var(--amber), var(--pink)); }
+
+        .timeline-line { position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%; background: linear-gradient(to bottom, var(--cyan), var(--purple), transparent); }
+        .timeline-node { width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 2px solid var(--cyan); box-shadow: 0 0 12px rgba(0,229,255,0.4); }
+
+        .reveal { opacity: 0; transform: translateY(48px); transition: all 0.85s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .mobile-menu { transform: translateX(100%); transition: transform 0.3s ease; }
+        .mobile-menu.open { transform: translateX(0); }
+
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #39ff14; box-shadow: 0 0 10px #39ff14; }
+        .energy-burst { position: fixed; pointer-events: none; z-index: 9998; border-radius: 50%; background: radial-gradient(circle, rgba(0,229,255,0.45) 0%, transparent 70%); transform: translate(-50%,-50%) scale(0); animation: burstExpand 0.55s ease-out forwards; }
+        @keyframes burstExpand { 0% { transform: translate(-50%,-50%) scale(0); opacity: 1; } 100% { transform: translate(-50%,-50%) scale(4.2); opacity: 0; } }
+
+        .social-link { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s ease; }
+        .social-link:hover { border-color: var(--cyan); background: rgba(0,229,255,0.06); }
+
+        #xp-bar-container {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 55; background: rgba(3,3,8,0.88); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,229,255,0.18); padding: 5px 16px; display: flex; align-items: center; gap: 12px;
+            font-family: 'Orbitron', monospace; font-size: 10px; opacity: 0; transform: translateY(-100%); transition: all 0.4s ease;
+        }
+        #xp-bar-container.visible { opacity: 1; transform: translateY(0); }
+        .xp-label { color: var(--cyan); }
+        .xp-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; overflow: hidden; }
+        .xp-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--cyan), var(--purple)); border-radius: 3px; transition: width 0.25s ease-out; }
+
+        #achievement-container { position: fixed; top: 52px; right: 16px; z-index: 60; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+        .achievement-toast {
+            background: rgba(8,8,15,0.96); border: 1px solid rgba(0,229,255,0.35); border-left: 3px solid var(--cyan);
+            padding: 12px 18px; display: flex; align-items: center; gap: 12px; transform: translateX(120%); opacity: 0; animation: achievementSlide 0.5s ease forwards;
+        }
+        @keyframes achievementSlide { to { transform: translateX(0); opacity: 1; } }
+        .achievement-toast.hiding { animation: achievementFade 0.4s ease forwards; }
+        @keyframes achievementFade { to { transform: translateX(120%); opacity: 0; } }
+        .achievement-title { font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--cyan); }
+        .achievement-desc { font-family: 'Space Grotesk', sans-serif; font-size: 10px; color: var(--game-muted); }
+
+        #terminal-btn {
+            position: fixed; bottom: 24px; right: 24px; z-index: 70; width: 52px; height: 52px; border-radius: 50%;
+            background: rgba(8,8,15,0.92); border: 1px solid rgba(0,229,255,0.45); display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        #terminal-window {
+            position: fixed; bottom: 88px; right: 24px; z-index: 70; width: 430px; max-width: calc(100vw - 48px); height: 330px;
+            background: rgba(3,3,8,0.97); border: 1px solid rgba(0,229,255,0.32); display: none; flex-direction: column; overflow: hidden;
+        }
+        #terminal-window.open { display: flex; }
+        .terminal-header { background: rgba(0,229,255,0.1); padding: 9px 14px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(0,229,255,0.18); cursor: move; }
+        .terminal-body { flex: 1; padding: 12px; overflow-y: auto; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.65; }
+        .terminal-input { background: transparent; border: none; outline: none; color: var(--game-text); font-family: 'JetBrains Mono', monospace; font-size: 11px; flex: 1; }
+
+        #video-modal {
+            position: fixed; inset: 0; z-index: 100; background: rgba(3,3,8,0.97); backdrop-filter: blur(22px); display: none; align-items: center; justify-content: center; padding: 24px;
+        }
+        #video-modal.open { display: flex; }
+        .modal-content { width: 100%; max-width: 1000px; position: relative; }
+        .modal-close { position: absolute; top: -42px; right: 0; color: var(--game-muted); cursor: pointer; font-size: 26px; z-index: 10; }
+        .video-player-container { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border: 1px solid rgba(0,229,255,0.25); }
+        .video-player-container video, .video-player-container img { width: 100%; height: 100%; object-fit: contain; }
+        .video-controls { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85); padding: 16px; display: flex; align-items: center; justify-content: space-between; opacity: 0; transition: opacity 0.3s; }
+        .video-player-container:hover .video-controls { opacity: 1; }
+        .video-mute-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: var(--game-text); padding: 6px 12px; cursor: pointer; }
+        .video-gallery-thumbs { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; }
+        .gallery-thumb { flex-shrink: 0; width: 120px; height: 68px; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; position: relative; overflow: hidden; }
+        .gallery-thumb.active { border-color: var(--cyan); }
+        .gallery-thumb img, .gallery-thumb video { width: 100%; height: 100%; object-fit: cover; }
+        .thumb-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.75); padding: 2px 6px; font-size: 9px; color: var(--game-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .loading-screen { position: fixed; inset: 0; z-index: 10000; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .loading-screen.hidden { opacity: 0; visibility: hidden; transition: all 0.8s ease; }
+        .loading-bar { width: 320px; height: 4px; background: rgba(255,255,255,0.08); position: relative; overflow: hidden; margin-top: 22px; }
+        .loading-bar-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink)); width: 0%; transition: width 0.3s ease; }
+        .loading-text { font-family: 'Orbitron', monospace; font-size: 12px; color: var(--cyan); margin-top: 12px; letter-spacing: 0.2em; }
+        .boot-line { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--game-muted); margin-bottom: 6px; opacity: 0; animation: bootAppear 0.3s ease forwards; }
+        .boot-line.success { color: #39ff14; }
+        .boot-line.process { color: var(--cyan); }
+        @keyframes bootAppear { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .tag-pill:hover { border-color: rgba(0,229,255,0.4) !important; color: var(--cyan) !important; }
+    </style>
+</head>
+<body class="bg-game-black text-game-text">
+    <!-- Scanlines -->
+    <div class="scanlines"></div>
+
+    <!-- Background Layers -->
+    <div class="bg-layer bg-gradient-anim"></div>
+    <div class="bg-layer light-rays"></div>
+    <div class="bg-layer grid-bg"></div>
+    <div class="bg-layer hex-float"></div>
+    <div class="bg-layer energy-fog"></div>
+
+    <!-- Particle Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Mouse Spotlight -->
+    <div class="spotlight" id="spotlight"></div>
+
+    <!-- XP SCROLL BAR -->
+    <div id="xp-bar-container">
+        <span class="xp-label" id="xp-level">LVL 1 EXPLORER</span>
+        <div class="xp-track">
+            <div class="xp-fill" id="xp-fill"></div>
+        </div>
+        <span class="xp-percent" id="xp-percent">0%</span>
+    </div>
+
+    <!-- ACHIEVEMENT CONTAINER -->
+    <div id="achievement-container"></div>
+
+    <!-- LOADING SCREEN -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="font-orbitron text-2xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-glow via-purple-glow to-hot-pink tracking-widest mb-6">SYSTEM INITIALIZING</div>
+        <div id="boot-sequence" class="text-left max-w-md mx-auto mb-8" style="min-height: 210px;"></div>
+        <div class="loading-bar">
+            <div class="loading-bar-fill" id="loading-bar-fill"></div>
+        </div>
+        <div class="loading-text" id="loading-text">0%</div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass border-b border-white/5 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 md:h-20">
+                <a href="#hero" class="flex items-center space-x-3 group">
+                    <div class="w-8 h-8 border border-cyan-glow/40 flex items-center justify-center relative overflow-hidden group-hover:border-cyan-glow transition-colors">
+                        <div class="absolute inset-0 bg-gradient-to-br from-cyan-glow/15 to-purple-glow/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <span class="font-orbitron text-cyan-glow text-sm font-bold">AD</span>
+                    </div>
+                    <span class="font-orbitron text-sm tracking-widest text-white/80 hidden sm:block">ADITYA DANGE</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#about" class="nav-link px-4 py-2 text-sm font-space text-game-muted hover:text-cyan-glow transition-colors relative group">
+                        <span class="relative z-10">ABOUT</span>
+                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-glow to-purple-glow transition-all duration-300 group-hover:w-full"></div>
+                    </a>
+                    <a href="#skills" class="nav-link px-4 py-2 text-sm font-space text-game-muted hover:text-cyan-glow transition-colors relative group">
+                        <span class="relative z-10">SKILLS</span>
+                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-glow to-purple-glow transition-all duration-300 group-hover:w-full"></div>
+                    </a>
+                    <a href="#projects" class="nav-link px-4 py-2 text-sm font-space text-game-muted hover:text-cyan-glow transition-colors relative group">
+                        <span class="relative z-10">PROJECTS</span>
+                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-glow to-purple-glow transition-all duration-300 group-hover:w-full"></div>
+                    </a>
+                    <a href="#experience" class="nav-link px-4 py-2 text-sm font-space text-game-muted hover:text-cyan-glow transition-colors relative group">
+                        <span class="relative z-10">EXPERIENCE</span>
+                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-glow to-purple-glow transition-all duration-300 group-hover:w-full"></div>
+                    </a>
+                    <a href="#contact" class="nav-link ml-4 px-5 py-2 text-sm font-space border border-cyan-glow/35 text-cyan-glow hover:bg-cyan-glow/10 transition-all neon-btn">CONTACT</a>
+                </div>
+                <button aria-label="Toggle Mobile Menu" class="md:hidden p-2 text-game-muted hover:text-cyan-glow transition-colors" id="mobile-menu-btn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu fixed inset-y-0 right-0 w-64 glass-strong z-50 md:hidden" id="mobile-menu">
+        <div class="p-6">
+            <button aria-label="Close Mobile Menu" class="absolute top-6 right-6 text-game-muted hover:text-cyan-glow" id="mobile-menu-close">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="mt-16 space-y-4">
+                <a href="#about" class="block py-3 text-lg font-space text-game-muted hover:text-cyan-glow transition-colors border-b border-white/5">About</a>
+                <a href="#skills" class="block py-3 text-lg font-space text-game-muted hover:text-cyan-glow transition-colors border-b border-white/5">Skills</a>
+                <a href="#projects" class="block py-3 text-lg font-space text-game-muted hover:text-cyan-glow transition-colors border-b border-white/5">Projects</a>
+                <a href="#experience" class="block py-3 text-lg font-space text-game-muted hover:text-cyan-glow transition-colors border-b border-white/5">Experience</a>
+                <a href="#contact" class="block py-3 text-lg font-space text-cyan-glow">Contact</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-game-black/50 to-game-black z-0"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="text-center md:text-left order-2 md:order-1">
+                    <div class="parallax-layer" data-speed="0.02">
+                        <div class="inline-flex items-center space-x-2 mb-6 px-4 py-2 glass rounded-none border border-cyan-glow/25">
+                            <div class="status-dot"></div>
+                            <span class="font-space text-xs tracking-widest text-neon-green uppercase">Available for Opportunities</span>
+                        </div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.03">
+                        <h2 class="font-orbitron text-xl md:text-2xl text-cyan-glow/80 tracking-[0.3em] mb-3 uppercase">Aditya Dange</h2>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.05">
+                        <h1 class="font-orbitron text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight leading-none">
+                            <span class="block">GAMEPLAY</span>
+                            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-cyan-glow via-electric-blue via-purple-glow to-hot-pink">PROGRAMMER</span>
+                        </h1>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.07">
+                        <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
+                            <span class="tag-pill px-3 py-1.5 border border-cyan-glow/25 text-cyan-glow/90 text-xs font-space tracking-wider">UNITY 6</span>
+                            <span class="tag-pill px-3 py-1.5 border border-purple-glow/25 text-purple-glow/90 text-xs font-space tracking-wider">UNREAL ENGINE 5</span>
+                            <span class="tag-pill px-3 py-1.5 border border-hot-pink/25 text-hot-pink/90 text-xs font-space tracking-wider">C#</span>
+                            <span class="tag-pill px-3 py-1.5 border border-amber-glow/25 text-amber-glow/90 text-xs font-space tracking-wider">C++</span>
+                            <span class="tag-pill px-3 py-1.5 border border-neon-green/25 text-neon-green/90 text-xs font-space tracking-wider">GAMEPLAY SYSTEMS</span>
+                            <span class="tag-pill px-3 py-1.5 border border-electric-blue/25 text-electric-blue/90 text-xs font-space tracking-wider">AI</span>
+                            <span class="tag-pill px-3 py-1.5 border border-magenta/25 text-magenta/90 text-xs font-space tracking-wider">PROCEDURAL GEN</span>
+                        </div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.09">
+                        <p class="font-inter text-base md:text-lg text-game-muted max-w-xl mb-8 leading-relaxed mx-auto md:mx-0">
+                            I build <span class="text-cyan-glow">gameplay systems</span>, <span class="text-purple-glow">combat mechanics</span>, <span class="text-hot-pink">procedural generation tools</span>, AI behaviors, and immersive player experiences using Unity and Unreal Engine.
+                        </p>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.11">
+                        <div class="flex flex-wrap justify-center md:justify-start gap-4 mb-8">
+                            <a href="#projects" class="px-7 py-3.5 bg-gradient-to-r from-cyan-glow/15 to-purple-glow/10 border border-cyan-glow/50 text-cyan-glow font-space tracking-wider text-sm hover:from-cyan-glow/25 hover:to-purple-glow/20 transition-all neon-btn">VIEW PROJECTS</a>
+                            <a href="assets/Resume/Resume.png" download="Aditya_Dange_Resume.png" onclick="unlockAchievement('intel_secured', '🏆 Intel Secured', 'Downloaded Resume')" class="px-7 py-3.5 border border-white/20 text-white font-space tracking-wider text-sm hover:border-hot-pink/50 hover:text-hot-pink hover:bg-hot-pink/5 transition-all neon-btn">DOWNLOAD RESUME</a>
+                        </div>
+                    </div>
+                    <div class="parallax-layer" data-speed="0.13">
+                        <div class="flex justify-center md:justify-start gap-3">
+                            <a href="https://github.com/aadigamedev37" target="_blank" class="social-link text-game-muted hover:text-cyan-glow">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                <span class="font-space text-xs">GitHub</span>
+                            </a>
+                            <a href="https://linkedin.com/in/adityadange-dev" target="_blank" class="social-link text-game-muted hover:text-electric-blue">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                                <span class="font-space text-xs">LinkedIn</span>
+                            </a>
+                            <a href="assets/resume/Aditya_Dange_Resume_Updated.html" target="_blank" class="social-link text-game-muted hover:text-hot-pink">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                                <span class="font-space text-xs">View Resume</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CYBERPUNK UI PROFILE CARD WITH PERFECTLY FRAMED PORTRAIT -->
+                <div class="flex justify-center md:justify-end order-1 md:order-2">
+                    <div class="parallax-layer" data-speed="0.04">
+                        <div class="glass holo-card hud-corners" id="holo-card-interactive">
+                            <!-- Radial glow -->
+                            <div class="absolute inset-0 bg-cyan-glow/5 blur-2xl rounded-full"></div>
+                            
+                            <div class="portrait-container">
+                                <div class="portrait-frame-border"></div>
+                                <div class="portrait-img-wrapper">
+                                    <img src="assets/images/PhotoSelf.png" alt="Aditya Dange - Gameplay Programmer" class="clean-portrait-image" onerror="this.src='assets/images/PhotoSelf.jpg';">
+                                </div>
+                            </div>
+
+                            <!-- Compact HUD Panel -->
+                            <div class="w-full mt-6 border-t border-cyan-glow/20 pt-4 relative z-10">
+                                <div class="font-space text-[10px] uppercase text-game-muted space-y-2.5 w-full">
+                                    <div class="flex justify-between items-center gap-4">
+                                        <span class="text-cyan-glow tracking-widest">STATUS</span>
+                                        <span class="text-white flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-[#00ff88] rounded-full animate-pulse shadow-[0_0_5px_#00ff88]"></span>ONLINE</span>
+                                    </div>
+                                    <div class="flex justify-between items-center gap-4">
+                                        <span class="text-cyan-glow tracking-widest">ROLE</span>
+                                        <span class="text-white text-right">Gameplay Programmer</span>
+                                    </div>
+                                    <div class="flex justify-between items-center gap-4">
+                                        <span class="text-cyan-glow tracking-widest">ENGINE</span>
+                                        <span class="text-white text-right">Unity 6 / Unreal Engine 5</span>
+                                    </div>
+                                    <div class="flex justify-between items-center gap-4">
+                                        <span class="text-cyan-glow tracking-widest">LOCATION</span>
+                                        <span class="text-white text-right">Mumbai, India</span>
+                                    </div>
+                                    <div class="flex justify-between items-center gap-4">
+                                        <span class="text-cyan-glow tracking-widest">CURRENT TASK</span>
+                                        <span class="text-white text-right">Project Vanguard</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-2 opacity-50">
+            <span class="font-space text-xs tracking-widest text-game-muted">SCROLL</span>
+            <div class="w-px h-12 bg-gradient-to-b from-cyan-glow via-purple-glow to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="relative py-24 md:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <h2 class="section-title text-3xl md:text-4xl font-orbitron text-white mb-8">ABOUT ME</h2>
+                    <div class="space-y-6 font-inter text-game-muted leading-relaxed">
+                        <p class="text-lg">
+                            I am a <span class="text-cyan-glow font-semibold">Gameplay Programmer</span> focused on building scalable gameplay systems, procedural generation, AI behaviors, and responsive combat mechanics. I enjoy transforming complex technical systems into polished and enjoyable player experiences.
+                        </p>
+                        <p>
+                            My expertise spans from low-level gameplay architecture to high-level system design. I specialize in building modular frameworks that empower designers and create memorable player experiences.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 pt-4">
+                            <div class="flex items-center space-x-3"><div class="w-2 h-2 bg-cyan-glow shadow-[0_0_8px_#00e5ff]"></div><span class="text-sm font-space text-white/85">Unity Expert</span></div>
+                            <div class="flex items-center space-x-3"><div class="w-2 h-2 bg-purple-glow shadow-[0_0_8px_#a855f7]"></div><span class="text-sm font-space text-white/85">Unreal Engine</span></div>
+                            <div class="flex items-center space-x-3"><div class="w-2 h-2 bg-hot-pink shadow-[0_0_8px_#ff2d95]"></div><span class="text-sm font-space text-white/85">Combat Systems</span></div>
+                            <div class="flex items-center space-x-3"><div class="w-2 h-2 bg-neon-green shadow-[0_0_8px_#39ff14]"></div><span class="text-sm font-space text-white/85">Procedural Gen</span></div>
+                            <div class="flex items-center space-x-3"><div class="w-2 h-2 bg-amber-glow shadow-[0_0_8px_#ffb020]"></div><span class="text-sm font-space text-white/85">Cinematics</span></div>
+                            <div class="flex items-center space-x-3"><div class="w-2 h-2 bg-electric-blue shadow-[0_0_8px_#22d3ee]"></div><span class="text-sm font-space text-white/85">AI Systems</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal relative">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-cyan-glow/12 via-purple-glow/10 to-hot-pink/08 blur-2xl"></div>
+                    <div class="relative glass p-8 md:p-10 hud-corners">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="font-orbitron text-xs text-cyan-glow tracking-widest">PROFILE</span>
+                            <div class="flex space-x-2">
+                                <div class="w-2 h-2 bg-cyan-glow/60 rounded-full"></div>
+                                <div class="w-2 h-2 bg-purple-glow/50 rounded-full"></div>
+                                <div class="w-2 h-2 bg-hot-pink/40 rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center py-3 border-b border-white/5"><span class="font-space text-sm text-game-muted">Role</span><span class="font-space text-sm text-white">Gameplay Programmer</span></div>
+                            <div class="flex justify-between items-center py-3 border-b border-white/5"><span class="font-space text-sm text-game-muted">Focus</span><span class="font-space text-sm text-white">Unity & Unreal Engine</span></div>
+                            <div class="flex justify-between items-center py-3 border-b border-white/5"><span class="font-space text-sm text-game-muted">Specialty</span><span class="font-space text-sm text-white">Systems Architecture</span></div>
+                            <div class="flex justify-between items-center py-3 border-b border-white/5"><span class="font-space text-sm text-game-muted">Location</span><span class="font-space text-sm text-white">Mumbai, India</span></div>
+                            <div class="flex justify-between items-center py-3"><span class="font-space text-sm text-game-muted">Status</span><span class="font-space text-sm text-neon-green flex items-center gap-2"><span class="w-1.5 h-1.5 bg-neon-green rounded-full animate-pulse"></span>Open to Work</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section id="skills" class="relative py-24 md:py-32 hex-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="section-title text-3xl md:text-4xl font-orbitron text-white mb-4">TECHNICAL ARSENAL</h2>
+                <p class="font-space text-game-muted max-w-2xl mx-auto">Tools and technologies I use to build immersive gameplay experiences</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Unity -->
+                <div class="reveal reveal-delay-1">
+                    <div class="glass p-6 md:p-8 skill-card h-full">
+                        <div class="glow-line"></div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-10 h-10 border border-cyan-glow/40 flex items-center justify-center bg-cyan-glow/5"><span class="font-orbitron text-cyan-glow text-lg">U</span></div>
+                            <h3 class="font-orbitron text-xl text-white tracking-wider">UNITY</h3>
+                        </div>
+                        
+                        <div class="skill-category-header">CORE GAMEPLAY</div>
+                        <div class="skill-desc">Building responsive player mechanics, combat interactions and gameplay architecture.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert"></div><span class="skill-hex-name">Character Controllers</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert"></div><span class="skill-hex-name">Combat Systems</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert"></div><span class="skill-hex-name">Gameplay Systems</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert"></div><span class="skill-hex-name">C# Programming</span></div>
+                        </div>
+                        
+                        <div class="skill-category-header">TECHNICAL SYSTEMS</div>
+                        <div class="skill-desc">Reusable architecture, modular workflows and scalable Unity systems.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced"></div><span class="skill-hex-name">Scriptable Objects</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced"></div><span class="skill-hex-name">Object Pooling</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced"></div><span class="skill-hex-name">Cinemachine</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced"></div><span class="skill-hex-name">Animation Rigging</span></div>
+                        </div>
+                        
+                        <div class="skill-category-header">GAMEPLAY ARCHITECTURE</div>
+                        <div class="skill-desc">Procedural level generation using connected rooms, corridors, stairs, special rooms and intelligent spawning systems.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot proficient"></div><span class="skill-hex-name">Procedural Generation</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot proficient"></div><span class="skill-hex-name">Modular Level Gen</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot proficient"></div><span class="skill-hex-name">Room Stitching</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot proficient"></div><span class="skill-hex-name">Spawn Systems</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Unreal Engine -->
+                <div class="reveal reveal-delay-2">
+                    <div class="glass p-6 md:p-8 skill-card h-full">
+                        <div class="glow-line"></div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-10 h-10 border border-purple-glow/40 flex items-center justify-center bg-purple-glow/5"><span class="font-orbitron text-purple-glow text-lg">UE</span></div>
+                            <h3 class="font-orbitron text-xl text-white tracking-wider">UNREAL ENGINE</h3>
+                        </div>
+                        
+                        <div class="skill-category-header" style="color: #a855f7;">GAMEPLAY</div>
+                        <div class="skill-desc">Gameplay scripting, cinematic flow and interactive gameplay systems.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:#a855f7;box-shadow:0 0 6px #a855f7;"></div><span class="skill-hex-name">Gameplay Framework</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:#a855f7;box-shadow:0 0 6px #a855f7;"></div><span class="skill-hex-name">Blueprint Systems</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:#a855f7;box-shadow:0 0 6px #a855f7;"></div><span class="skill-hex-name">Sequencer</span></div>
+                        </div>
+                        
+                        <div class="skill-category-header" style="color: #a855f7;">SYSTEMS</div>
+                        <div class="skill-desc">Building gameplay foundations and immersive environments.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot proficient" style="background:rgba(168,85,247,0.65);"></div><span class="skill-hex-name">C++</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot proficient" style="background:rgba(168,85,247,0.65);"></div><span class="skill-hex-name">Landscape & Terrain</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot proficient" style="background:rgba(168,85,247,0.65);"></div><span class="skill-hex-name">Environment Design</span></div>
+                        </div>
+                        
+                        <div class="skill-category-header" style="color: #a855f7;">SPECIALIZED</div>
+                        <div class="skill-desc">Atmosphere, mood and cinematic presentation.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot proficient" style="background:rgba(168,85,247,0.65);"></div><span class="skill-hex-name">Lighting</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tools -->
+                <div class="reveal reveal-delay-3">
+                    <div class="glass p-6 md:p-8 skill-card h-full">
+                        <div class="glow-line"></div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-10 h-10 border border-hot-pink/40 flex items-center justify-center bg-hot-pink/5"><span class="font-orbitron text-hot-pink text-lg">T</span></div>
+                            <h3 class="font-orbitron text-xl text-white tracking-wider">TOOLS</h3>
+                        </div>
+                        
+                        <div class="skill-category-header" style="color: #ff2d95;">VERSION CONTROL</div>
+                        <div class="skill-desc">Version control and collaborative development.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">Git</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">GitHub</span></div>
+                        </div>
+                        
+                        <div class="skill-category-header" style="color: #ff2d95;">IDE</div>
+                        <div class="skill-desc">Primary programming and debugging environments.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">Visual Studio</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:rgba(255,45,149,0.65);"></div><span class="skill-hex-name">VS Code</span></div>
+                        </div>
+                        
+                        <div class="skill-category-header" style="color: #ff2d95;">CONTENT CREATION</div>
+                        <div class="skill-desc">Basic modelling and asset preparation.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot advanced" style="background:rgba(255,45,149,0.65);"></div><span class="skill-hex-name">Blender (Basic)</span></div>
+                        </div>
+                        
+                        <div class="skill-category-header" style="color: #ff2d95;">ARCHITECTURE</div>
+                        <div class="skill-desc">Writing clean, maintainable and scalable gameplay code.</div>
+                        <div class="skill-hex-grid">
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">OOP</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">Modular Architecture</span></div>
+                            <div class="skill-hex-item"><div class="skill-hex-dot expert" style="background:#ff2d95;box-shadow:0 0 6px #ff2d95;"></div><span class="skill-hex-name">Technical Design</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="relative py-24 md:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="section-title text-3xl md:text-4xl font-orbitron text-white mb-4">MISSION LOG</h2>
+                <p class="font-space text-game-muted max-w-2xl mx-auto">Featured gameplay programming projects and technical demonstrations</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Project 1: Project Vanguard -->
+                <div class="reveal reveal-delay-1">
+                    <div class="glass project-card group h-full flex flex-col overflow-hidden border border-white/5">
+                        <div class="relative h-64 overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-game-surface via-[#0a1a22] to-game-surface group-hover:scale-110 transition-transform duration-700">
+                                <img src="assets/images/Project%20-%20Vanguard.png" alt="Project Vanguard" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-game-black via-transparent to-transparent opacity-80"></div>
+                            
+                            <!-- Project Stats Overlay (Fixed Left) -->
+                            <div class="project-stats-overlay stats-unity">
+                                <div class="font-orbitron text-[10px] text-cyan-glow mb-3 tracking-widest uppercase">Technical Stats</div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Gameplay</span>
+                                    <div class="stat-track"><div class="stat-fill cyan" style="--stat-width: 95%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Combat</span>
+                                    <div class="stat-track"><div class="stat-fill cyan" style="--stat-width: 90%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Architecture</span>
+                                    <div class="stat-track"><div class="stat-fill purple" style="--stat-width: 85%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">AI</span>
+                                    <div class="stat-track"><div class="stat-fill green" style="--stat-width: 80%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Proc Gen</span>
+                                    <div class="stat-track"><div class="stat-fill amber" style="--stat-width: 75%"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="absolute bottom-4 left-4">
+                                <span class="px-2 py-1 bg-cyan-glow/20 border border-cyan-glow/50 text-cyan-glow text-[10px] font-orbitron tracking-widest uppercase">Unity 6</span>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="font-orbitron text-xl text-white mb-3 group-hover:text-cyan-glow transition-colors">PROJECT VANGUARD</h3>
+                            <p class="font-inter text-sm text-game-muted mb-6 flex-1">A high-octane action framework focusing on modular combat systems, responsive character controllers, and advanced AI behavior trees.</p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2 py-1 bg-cyan-glow/10 border border-cyan-glow/20 text-cyan-glow/90 text-[10px] font-space uppercase">Combat Systems</span>
+                                <span class="px-2 py-1 bg-purple-glow/10 border border-purple-glow/20 text-purple-glow/90 text-[10px] font-space uppercase">Behavior Trees</span>
+                                <span class="px-2 py-1 bg-neon-green/10 border border-neon-green/20 text-neon-green/90 text-[10px] font-space uppercase">Object Pooling</span>
+                            </div>
+                            <button class="w-full py-3 border border-cyan-glow/35 text-cyan-glow font-space text-xs tracking-widest hover:bg-cyan-glow/10 transition-all neon-btn gallery-trigger" data-project="vanguard">VIEW INTEL / GALLERY</button>
+                        </div>
+                        <div class="card-border"></div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Anuja Ka Badla -->
+                <div class="reveal reveal-delay-2">
+                    <div class="glass project-card group h-full flex flex-col overflow-hidden border border-white/5">
+                        <div class="relative h-64 overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-game-surface via-[#1a0f22] to-game-surface group-hover:scale-110 transition-transform duration-700">
+                                <img src="assets/images/Anuja%20Ka%20Badla.png" alt="Anuja Ka Badla" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-game-black via-transparent to-transparent opacity-80"></div>
+                            
+                            <!-- Project Stats Overlay (Fixed Left) -->
+                            <div class="project-stats-overlay stats-unreal">
+                                <div class="font-orbitron text-[10px] text-purple-glow mb-3 tracking-widest uppercase">Technical Stats</div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Systems</span>
+                                    <div class="stat-track"><div class="stat-fill purple" style="--stat-width: 90%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">UI/UX</span>
+                                    <div class="stat-track"><div class="stat-fill cyan" style="--stat-width: 85%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Logic</span>
+                                    <div class="stat-track"><div class="stat-fill amber" style="--stat-width: 95%"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="absolute bottom-4 left-4">
+                                <span class="px-2 py-1 bg-purple-glow/20 border border-purple-glow/50 text-purple-glow text-[10px] font-orbitron tracking-widest uppercase">Unreal Engine 5</span>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="font-orbitron text-xl text-white mb-3 group-hover:text-purple-glow transition-colors">ANUJA KA BADLA</h3>
+                            <p class="font-inter text-sm text-game-muted mb-6 flex-1">A narrative-driven action game featuring complex quest systems, interactive environments, and dynamic camera work.</p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2 py-1 bg-purple-glow/10 border border-purple-glow/20 text-purple-glow/90 text-[10px] font-space uppercase">Blueprints</span>
+                                <span class="px-2 py-1 bg-hot-pink/10 border border-hot-pink/20 text-hot-pink/90 text-[10px] font-space uppercase">Quest System</span>
+                                <span class="px-2 py-1 bg-cyan-glow/10 border border-cyan-glow/20 text-cyan-glow/90 text-[10px] font-space uppercase">Sequencer</span>
+                            </div>
+                            <button class="w-full py-3 border border-purple-glow/35 text-purple-glow font-space text-xs tracking-widest hover:bg-purple-glow/10 transition-all neon-btn gallery-trigger" data-project="anuja">VIEW INTEL / GALLERY</button>
+                        </div>
+                        <div class="card-border"></div>
+                    </div>
+                </div>
+
+                <!-- Project 3: The Hollow Veil -->
+                <div class="reveal reveal-delay-1">
+                    <div class="glass project-card group h-full flex flex-col overflow-hidden border border-white/5">
+                        <div class="relative h-64 overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-game-surface via-[#0a1520] to-game-surface group-hover:scale-110 transition-transform duration-700">
+                                <img src="assets/images/The%20Hollow%20Veil.png" alt="The Hollow Veil" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-game-black via-transparent to-transparent opacity-80"></div>
+                            
+                            <!-- Project Stats Overlay (Fixed Left) -->
+                            <div class="project-stats-overlay stats-unreal">
+                                <div class="font-orbitron text-[10px] text-purple-glow mb-3 tracking-widest uppercase">Technical Stats</div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Atmosphere</span>
+                                    <div class="stat-track"><div class="stat-fill cyan" style="--stat-width: 90%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Optimization</span>
+                                    <div class="stat-track"><div class="stat-fill green" style="--stat-width: 85%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">VFX Logic</span>
+                                    <div class="stat-track"><div class="stat-fill purple" style="--stat-width: 80%"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="absolute bottom-4 left-4">
+                                <span class="px-2 py-1 bg-purple-glow/20 border border-purple-glow/50 text-purple-glow text-[10px] font-orbitron tracking-widest uppercase">Unreal Engine</span>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="font-orbitron text-xl text-white mb-3 group-hover:text-purple-glow transition-colors">THE HOLLOW VEIL</h3>
+                            <p class="font-inter text-sm text-game-muted mb-6 flex-1">A psychological horror experience focusing on immersive atmosphere, lighting systems, and scripted event triggers.</p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2 py-1 bg-electric-blue/10 border border-electric-blue/20 text-electric-blue/90 text-[10px] font-space uppercase">Lighting</span>
+                                <span class="px-2 py-1 bg-amber-glow/10 border border-amber-glow/20 text-amber-glow/90 text-[10px] font-space uppercase">Event Triggers</span>
+                                <span class="px-2 py-1 bg-purple-glow/10 border border-purple-glow/20 text-purple-glow/90 text-[10px] font-space uppercase">Audio Systems</span>
+                            </div>
+                            <button class="w-full py-3 border border-purple-glow/30 text-purple-glow font-space text-xs tracking-widest hover:bg-purple-glow/10 transition-all neon-btn gallery-trigger" data-project="hollow">VIEW INTEL / GALLERY</button>
+                        </div>
+                        <div class="card-border"></div>
+                    </div>
+                </div>
+
+                <!-- Project 4: 2D Platformer -->
+                <div class="reveal reveal-delay-2">
+                    <div class="glass project-card group h-full flex flex-col overflow-hidden border border-white/5">
+                        <div class="relative h-64 overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-br from-game-surface via-[#1a1220] to-game-surface group-hover:scale-110 transition-transform duration-700">
+                                <img src="assets/images/2D%20Platformer.png" alt="2D Platformer" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500" loading="lazy">
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-game-black via-transparent to-transparent opacity-80"></div>
+                            
+                            <!-- Project Stats Overlay (Fixed Left) -->
+                            <div class="project-stats-overlay stats-unity">
+                                <div class="font-orbitron text-[10px] text-cyan-glow mb-3 tracking-widest uppercase">Technical Stats</div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Physics</span>
+                                    <div class="stat-track"><div class="stat-fill purple" style="--stat-width: 95%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Mechanics</span>
+                                    <div class="stat-track"><div class="stat-fill cyan" style="--stat-width: 90%"></div></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Level Design</span>
+                                    <div class="stat-track"><div class="stat-fill amber" style="--stat-width: 80%"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="absolute bottom-4 left-4">
+                                <span class="px-2 py-1 bg-cyan-glow/20 border border-cyan-glow/50 text-cyan-glow text-[10px] font-orbitron tracking-widest uppercase">Unity</span>
+                            </div>
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="font-orbitron text-xl text-white mb-3 group-hover:text-cyan-glow transition-colors">2D PLATFORMER</h3>
+                            <p class="font-inter text-sm text-game-muted mb-6 flex-1">A polished 2D platforming experience featuring precise movement physics, wall jumps, and interactive level elements.</p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2 py-1 bg-hot-pink/10 border border-hot-pink/20 text-hot-pink/90 text-[10px] font-space uppercase">Physics</span>
+                                <span class="px-2 py-1 bg-cyan-glow/10 border border-cyan-glow/20 text-cyan-glow/90 text-[10px] font-space uppercase">Controller</span>
+                                <span class="px-2 py-1 bg-neon-green/10 border border-neon-green/20 text-neon-green/90 text-[10px] font-space uppercase">Level Design</span>
+                            </div>
+                            <button class="w-full py-3 border border-cyan-glow/35 text-cyan-glow font-space text-xs tracking-widest hover:bg-cyan-glow/10 transition-all neon-btn gallery-trigger" data-project="platformer">VIEW INTEL / GALLERY</button>
+                        </div>
+                        <div class="card-border"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE SECTION -->
+    <section id="experience" class="relative py-24 md:py-32">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="section-title text-3xl md:text-4xl font-orbitron text-white mb-4">CAREER PROGRESSION</h2>
+                <p class="font-space text-game-muted">Professional journey in game development</p>
+            </div>
+            <div class="relative reveal">
+                <div class="timeline-line hidden md:block"></div>
+                <div class="space-y-12">
+                    <!-- GlobalStep -->
+                    <div class="relative flex flex-col md:flex-row items-center md:items-start">
+                        <div class="hidden md:flex w-1/2 justify-end pr-8">
+                            <div class="glass p-6 border border-white/5 max-w-md text-right">
+                                <span class="font-orbitron text-xs text-cyan-glow tracking-widest">2026</span>
+                                <h3 class="font-orbitron text-lg text-white mt-2 tracking-wider">GLOBALSTEP</h3>
+                                <p class="font-space text-sm text-game-muted mt-1">Game Tester Intern</p>
+                                <p class="font-space text-xs text-game-muted mt-1">3 Months</p>
+                            </div>
+                        </div>
+                        <div class="timeline-node hidden md:block z-10"></div>
+                        <div class="md:hidden mb-4"><div class="timeline-node mx-auto"></div></div>
+                        <div class="md:w-1/2 md:pl-8 w-full">
+                            <div class="glass p-6 border border-white/5">
+                                <div class="md:hidden mb-4">
+                                    <span class="font-orbitron text-xs text-cyan-glow tracking-widest">2026</span>
+                                    <h3 class="font-orbitron text-lg text-white mt-2 tracking-wider">GLOBALSTEP</h3>
+                                    <p class="font-space text-sm text-game-muted mt-1">Game Tester Intern · 3 Months</p>
+                                </div>
+                                <h4 class="font-orbitron text-sm text-white tracking-wider mb-4 hidden md:block uppercase">Responsibilities</h4>
+                                <div class="space-y-2">
+                                    <div class="flex items-start space-x-3"><div class="w-1.5 h-1.5 bg-cyan-glow mt-2 flex-shrink-0"></div><span class="font-space text-sm text-game-muted">Functional & Regression Testing</span></div>
+                                    <div class="flex items-start space-x-3"><div class="w-1.5 h-1.5 bg-purple-glow mt-2 flex-shrink-0"></div><span class="font-space text-sm text-game-muted">Gameplay Testing & Build Verification</span></div>
+                                    <div class="flex items-start space-x-3"><div class="w-1.5 h-1.5 bg-hot-pink mt-2 flex-shrink-0"></div><span class="font-space text-sm text-game-muted">Bug Reporting & QA Workflow Management</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="relative py-24 md:py-32">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="section-title text-3xl md:text-4xl font-orbitron text-white mb-4">ESTABLISH CONNECTION</h2>
+                <p class="font-space text-game-muted">Ready to build the next great game together</p>
+            </div>
+            <div class="reveal">
+                <div class="glass border border-cyan-glow/25 p-8 md:p-12 hud-corners">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div class="flex items-center space-x-4 p-4 bg-white/5 border border-white/5 hover:border-cyan-glow/35 transition-colors group">
+                                <div class="w-12 h-12 border border-cyan-glow/35 flex items-center justify-center group-hover:border-cyan-glow transition-colors bg-cyan-glow/5">
+                                    <svg class="w-5 h-5 text-cyan-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                </div>
+                                <div>
+                                    <p class="font-space text-xs text-game-muted tracking-wider uppercase">Email</p>
+                                    <a href="mailto:aadi.gamedev@gmail.com" target="_blank" class="font-inter text-white hover:text-cyan-glow transition-colors">aadi.gamedev@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 p-4 bg-white/5 border border-white/5 hover:border-purple-glow/35 transition-colors group">
+                                <div class="w-12 h-12 border border-purple-glow/35 flex items-center justify-center group-hover:border-purple-glow transition-colors bg-purple-glow/5">
+                                    <svg class="w-5 h-5 text-purple-glow" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                </div>
+                                <div>
+                                    <p class="font-space text-xs text-game-muted tracking-wider uppercase">GitHub</p>
+                                    <a href="https://github.com/aadigamedev37" target="_blank" class="font-inter text-white hover:text-purple-glow transition-colors">github.com/aadigamedev37</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col justify-center space-y-6">
+                            <div class="p-6 bg-gradient-to-br from-cyan-glow/8 via-purple-glow/6 to-hot-pink/5 border border-cyan-glow/25">
+                                <h3 class="font-orbitron text-lg text-white mb-2 tracking-wider uppercase">Status Report</h3>
+                                <p class="font-inter text-sm text-game-muted mb-4">Available for full-time roles and collaborative projects.</p>
+                                <a href="mailto:aadi.gamedev@gmail.com" target="_blank" class="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-cyan-glow/15 to-purple-glow/10 border border-cyan-glow/50 text-cyan-glow font-space text-sm tracking-wider hover:from-cyan-glow/25 hover:to-purple-glow/20 transition-all neon-btn">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                                    <span>SEND MESSAGE</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative py-12 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 border border-cyan-glow/35 flex items-center justify-center"><span class="font-orbitron text-cyan-glow text-sm font-bold">AD</span></div>
+                    <span class="font-orbitron text-sm tracking-widest text-white/60">ADITYA DANGE // GAMEPLAY PROGRAMMER</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="https://github.com/aadigamedev37" target="_blank" class="text-game-muted hover:text-cyan-glow transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="https://linkedin.com/in/adityadange-dev" target="_blank" class="text-game-muted hover:text-electric-blue transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+                <p class="font-space text-xs text-game-muted tracking-wider uppercase">© 2026 All Systems Operational</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- TERMINAL WINDOW -->
+    <div id="terminal-btn" title="Open Terminal">
+        <svg class="w-6 h-6 text-cyan-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    </div>
+
+    <div id="terminal-window">
+        <div class="terminal-header">
+            <span class="terminal-title">AD_TERMINAL_V1.0.4</span>
+            <span class="terminal-close">×</span>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+            <div class="terminal-line">Welcome to Aditya's Portfolio Terminal.</div>
+            <div class="terminal-line">Type <span class="terminal-prompt">'help'</span> to see available commands.</div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">></span>
+                <input type="text" class="terminal-input" id="terminal-input" autofocus spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+    <!-- VIDEO GALLERY MODAL -->
+    <div id="video-modal">
+        <div class="modal-content">
+            <span class="modal-close">×</span>
+            <h2 class="modal-project-title" id="modal-project-title">PROJECT INTEL</h2>
+            <div class="video-player-container">
+                <video id="main-video" controls playsinline>
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <img id="main-image" src="" alt="Gallery Image" style="display: none;">
+                <div class="video-controls">
+                    <button class="video-mute-btn" aria-label="Mute Video" id="video-mute-btn">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" id="mute-icon"><path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path></svg>
+                        <span id="mute-text">MUTE</span>
+                    </button>
+                    <div class="text-[10px] font-space text-game-muted tracking-widest uppercase" id="media-status">Playing: Video Intel 01</div>
+                </div>
+            </div>
+            <div class="video-gallery-thumbs" id="gallery-thumbs"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const projectsData = {
+            vanguard: {
+                title: "PROJECT VANGUARD",
+                media: [
+                    { type: 'video', src: 'assets/videos/Project - Vanguard.mp4', label: 'Gameplay Intel 01' },
+                    { type: 'image', src: 'assets/images/Project%20-%20Vanguard.png', label: 'Architecture View' }
+                ]
+            },
+            anuja: {
+                title: "ANUJA KA BADLA",
+                media: [
+                    { type: 'video', src: 'assets/videos/Anuja Ka Badla.mp4', label: 'Cinematic Intel' },
+                    { type: 'image', src: 'assets/images/Anuja%20Ka%20Badla.png', label: 'Quest Logic' }
+                ]
+            },
+            hollow: {
+                title: "THE HOLLOW VEIL",
+                media: [
+                    { type: 'video', src: 'assets/videos/The Hollow Veil .mp4', label: 'Atmosphere Intel' },
+                    { type: 'image', src: 'assets/images/The%20Hollow%20Veil.png', label: 'Visuals' }
+                ]
+            },
+            platformer: {
+                title: "2D PLATFORMER",
+                media: [
+                    { type: 'video', src: 'assets/videos/2D Platformer.mp4', label: 'Physics Intel' },
+                    { type: 'image', src: 'assets/images/2D%20Platformer.png', label: 'Level Design' }
+                ]
+            }
+        };
+
+        // LOADING SCREEN
+        const bootLines = [
+            { text: "INITIALIZING AD_CORE_ENGINE v6.0.2...", class: "" },
+            { text: "LOADING GAMEPLAY SYSTEMS...", class: "process" },
+            { text: "PLAYER_CONTROLLER: OK", class: "success" },
+            { text: "INVENTORY_SYSTEM: OK", class: "success" },
+            { text: "AI_BEHAVIOR_TREES: OK", class: "success" },
+            { text: "COMPILING SHADERS...", class: "process" },
+            { text: "VERTEX_SHADERS: 1024 COMPILED", class: "success" },
+            { text: "FRAGMENT_SHADERS: 2048 COMPILED", class: "success" },
+            { text: "LOADING ASSETS...", class: "process" },
+            { text: "TEXTURES: 512MB LOADED", class: "success" },
+            { text: "MODELS: 128MB LOADED", class: "success" },
+            { text: "CONNECTING UI...", class: "process" },
+            { text: "HUD_INTERFACE: READY", class: "success" },
+            { text: "PORTFOLIO READY.", class: "success" }
+        ];
+
+        const bootSequence = document.getElementById('boot-sequence');
+        const loadingBarFill = document.getElementById('loading-bar-fill');
+        const loadingText = document.getElementById('loading-text');
+        const loadingScreen = document.getElementById('loading-screen');
+
+        let bootIdx = 0;
+        function playBootSequence() {
+            if (bootIdx < bootLines.length) {
+                const line = document.createElement('div');
+                line.className = `boot-line ${bootLines[bootIdx].class}`;
+                line.textContent = `> ${bootLines[bootIdx].text}`;
+                bootSequence.appendChild(line);
+                const progress = ((bootIdx + 1) / bootLines.length) * 100;
+                loadingBarFill.style.width = `${progress}%`;
+                loadingText.textContent = `${Math.floor(progress)}%`;
+                bootIdx++;
+                setTimeout(playBootSequence, Math.random() * 180 + 90);
+            } else {
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                    unlockAchievement('first_contact', '🏆 First Contact', 'Visited portfolio');
+                }, 750);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            document.body.style.overflow = 'hidden';
+            playBootSequence();
+        });
+
+        // XP SCROLL BAR
+        const xpBar = document.getElementById('xp-bar-container');
+        const xpFill = document.getElementById('xp-fill');
+        const xpPercent = document.getElementById('xp-percent');
+        const xpLevel = document.getElementById('xp-level');
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+
+            if (winScroll > 100) xpBar.classList.add('visible');
+            else xpBar.classList.remove('visible');
+
+            xpFill.style.width = scrolled + "%";
+            xpPercent.textContent = Math.floor(scrolled) + "%";
+
+            if (scrolled < 25) {
+                xpLevel.textContent = "LVL 1 EXPLORER";
+            } else if (scrolled < 50) {
+                xpLevel.textContent = "LVL 2 ARCHITECT";
+                unlockAchievement('system_architect', '🏆 System Architect', 'Reached Skills');
+            } else if (scrolled < 99) {
+                xpLevel.textContent = "LVL 3 VANGUARD";
+            } else {
+                xpLevel.textContent = "MAX LEVEL REACHED";
+                xpFill.classList.add('complete');
+                unlockAchievement('full_clear', '🏆 Full Clear', 'Reached footer');
+            }
+        });
+
+        // ACHIEVEMENT SYSTEM
+        const achievementContainer = document.getElementById('achievement-container');
+        const unlockedAchievements = new Set();
+
+        function unlockAchievement(id, title, desc) {
+            if (unlockedAchievements.has(id)) return;
+            unlockedAchievements.add(id);
+            const toast = document.createElement('div');
+            toast.className = 'achievement-toast';
+            toast.innerHTML = `
+                <div class="achievement-icon">🏆</div>
+                <div>
+                    <div class="achievement-title">${title}</div>
+                    <div class="achievement-desc">${desc}</div>
+                </div>
+            `;
+            achievementContainer.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('hiding');
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
+
+        // TERMINAL
+        const terminalBtn = document.getElementById('terminal-btn');
+        const terminalWindow = document.getElementById('terminal-window');
+        const terminalClose = document.querySelector('.terminal-close');
+        const terminalInput = document.getElementById('terminal-input');
+        const terminalBody = document.getElementById('terminal-body');
+
+        terminalBtn.addEventListener('click', () => {
+            terminalWindow.classList.toggle('open');
+            terminalBtn.classList.toggle('active');
+            if (terminalWindow.classList.contains('open')) terminalInput.focus();
+        });
+
+        terminalClose.addEventListener('click', () => {
+            terminalWindow.classList.remove('open');
+            terminalBtn.classList.remove('active');
+        });
+
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = terminalInput.value.toLowerCase().trim();
+                handleCommand(cmd);
+                terminalInput.value = '';
+            }
+        });
+
+        function handleCommand(cmd) {
+            if (!cmd) return;
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.innerHTML = `<span class="terminal-prompt">></span> ${cmd}`;
+            terminalBody.insertBefore(line, terminalInput.parentElement);
+
+            const output = document.createElement('div');
+            output.className = 'terminal-line terminal-output';
+
+            switch(cmd) {
+                case 'help':
+                    output.innerHTML = 'Available commands: help, whoami, skills, projects, contact, github, linkedin, resume, clear';
+                    break;
+                case 'whoami':
+                    output.innerHTML = 'ADITYA DANGE // Gameplay Programmer specializing in Unity & Unreal Engine.';
+                    break;
+                case 'skills':
+                    output.innerHTML = 'Unity, Unreal Engine, C#, C++, AI, Procedural Generation, Systems Architecture.';
+                    break;
+                case 'projects':
+                    output.innerHTML = 'Project Vanguard, Anuja Ka Badla, The Hollow Veil, 2D Platformer.';
+                    break;
+                case 'contact':
+                    output.innerHTML = 'Email: aadi.gamedev@gmail.com';
+                    break;
+                case 'github':
+                    output.innerHTML = 'Opening GitHub...';
+                    window.open('https://github.com/aadigamedev37', '_blank');
+                    break;
+                case 'linkedin':
+                    output.innerHTML = 'Opening LinkedIn...';
+                    window.open('https://linkedin.com/in/adityadange-dev', '_blank');
+                    break;
+                case 'resume':
+                    output.innerHTML = 'Opening HTML Resume...';
+                    unlockAchievement('intel_secured', '🏆 Intel Secured', 'Opened Resume');
+                    window.open('assets/resume/Aditya_Dange_Resume_Updated.html', '_blank');
+                    break;
+                case 'clear':
+                    terminalBody.innerHTML = '';
+                    terminalBody.appendChild(terminalInput.parentElement);
+                    return;
+                case 'sudo':
+                    output.innerHTML = '<span class="terminal-error">Access Denied. This incident will be reported.</span>';
+                    unlockAchievement('hacker_man', '💻 Hacker Man', 'Tried to use sudo privileges');
+                    break;
+                case 'konami':
+                    output.innerHTML = '<span class="terminal-success">Cheat activated: Infinite Logic loops acquired.</span>';
+                    unlockAchievement('code_breaker', '🎮 Code Breaker', 'You found a secret command');
+                    break;
+                case 'matrix':
+                    document.body.classList.toggle('matrix-mode');
+                    output.innerHTML = document.body.classList.contains('matrix-mode') ? 
+                        '<span class="terminal-success">Wake up, Neo...</span>' : 
+                        '<span class="terminal-output">Returning to default reality.</span>';
+                    break;
+                default:
+                    output.innerHTML = `<span class="terminal-error">Unknown command: ${cmd}. Type 'help' for assistance.</span>`;
+            }
+            terminalBody.insertBefore(output, terminalInput.parentElement);
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        // Draggable Terminal
+        let isDragging = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
+        const terminalHeader = document.querySelector('.terminal-header');
+        terminalHeader.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        function dragStart(e) {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+            if (e.target === terminalHeader || e.target.parentElement === terminalHeader) isDragging = true;
+        }
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                xOffset = currentX; yOffset = currentY;
+                terminalWindow.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+            }
+        }
+        function dragEnd() { initialX = currentX; initialY = currentY; isDragging = false; }
+
+        // VIDEO GALLERY
+        const videoModal = document.getElementById('video-modal');
+        const modalClose = document.querySelector('.modal-close');
+        const mainVideo = document.getElementById('main-video');
+        const mainImage = document.getElementById('main-image');
+        const modalTitle = document.getElementById('modal-project-title');
+        const galleryThumbs = document.getElementById('gallery-thumbs');
+        const muteBtn = document.getElementById('video-mute-btn');
+        const muteIcon = document.getElementById('mute-icon');
+        const muteText = document.getElementById('mute-text');
+        const mediaStatus = document.getElementById('media-status');
+
+        document.querySelectorAll('.gallery-trigger').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const projectId = btn.getAttribute('data-project');
+                openGallery(projectId);
+                if (projectId === 'vanguard') unlockAchievement('vanguard_explorer', '🏆 Vanguard Explorer', 'Viewed Project Vanguard');
+            });
+        });
+
+        modalClose.addEventListener('click', () => {
+            videoModal.classList.remove('open');
+            mainVideo.pause();
+        });
+
+        muteBtn.addEventListener('click', () => {
+            mainVideo.muted = !mainVideo.muted;
+            updateMuteUI();
+        });
+
+        function updateMuteUI() {
+            if (mainVideo.muted) {
+                muteText.textContent = 'UNMUTE';
+                muteIcon.innerHTML = '<path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.73 4.5a1 1 0 011.414 0 9.972 9.972 0 012.929 7.071 1 1 0 01-1.414 1.414A7.971 7.971 0 0013 10a7.971 7.971 0 00-2.343-5.657 1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path><path stroke="#ff6b6b" stroke-width="2" d="M3 3l14 14"></path>';
+            } else {
+                muteText.textContent = 'MUTE';
+                muteIcon.innerHTML = '<path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.983 5.983 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.984 3.984 0 00-1.172-2.828 1 1 0 010-1.415z" clip-rule="evenodd"></path>';
+            }
+        }
+
+        function openGallery(projectId) {
+            const data = projectsData[projectId];
+            if (!data) return;
+            modalTitle.textContent = data.title + " // INTEL";
+            galleryThumbs.innerHTML = '';
+            data.media.forEach((item, index) => {
+                const thumb = document.createElement('div');
+                thumb.className = `gallery-thumb ${index === 0 ? 'active' : ''}`;
+                if (item.type === 'video') {
+                    thumb.innerHTML = `<video src="${item.src}"></video><div class="thumb-label">${item.label}</div>`;
+                } else {
+                    thumb.innerHTML = `<img src="${item.src}" alt="${item.label}"><div class="thumb-label">${item.label}</div>`;
+                }
+                thumb.addEventListener('click', () => {
+                    document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                    loadMedia(item);
+                });
+                galleryThumbs.appendChild(thumb);
+            });
+            loadMedia(data.media[0]);
+            videoModal.classList.add('open');
+        }
+
+        function loadMedia(item) {
+            mediaStatus.textContent = `Displaying: ${item.label}`;
+            if (item.type === 'video') {
+                mainImage.style.display = 'none';
+                mainVideo.style.display = 'block';
+                mainVideo.src = item.src;
+                mainVideo.play();
+                muteBtn.style.display = 'flex';
+            } else {
+                mainVideo.pause();
+                mainVideo.style.display = 'none';
+                muteBtn.style.display = 'none';
+                mainImage.style.display = 'block';
+                mainImage.src = item.src;
+            }
+        }
+
+        // Mouse Spotlight
+        window.addEventListener('mousemove', e => {
+            document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
+            document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
+        });
+
+        // Interactive Hologram 3D Tilt & Parallax Effect
+        const holoCardInteractive = document.getElementById('holo-card-interactive');
+        if (holoCardInteractive) {
+            holoCardInteractive.addEventListener('mousemove', (e) => {
+                const rect = holoCardInteractive.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const rotateX = (-y / (rect.height / 2)) * 12;
+                const rotateY = (x / (rect.width / 2)) * 12;
+                holoCardInteractive.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+            holoCardInteractive.addEventListener('mouseleave', () => {
+                holoCardInteractive.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
+        }
+
+        // Particle Canvas - multi-color
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleColors = [
+            'rgba(0, 229, 255, ',
+            'rgba(168, 85, 247, ',
+            'rgba(255, 45, 149, ',
+            'rgba(57, 255, 20, ',
+            'rgba(34, 211, 238, '
+        ];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.2 + 0.4;
+                this.speedX = (Math.random() - 0.5) * 0.55;
+                this.speedY = (Math.random() - 0.5) * 0.55;
+                this.alpha = Math.random() * 0.55 + 0.12;
+                this.color = particleColors[Math.floor(Math.random() * particleColors.length)];
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+            }
+            draw() {
+                const isMatrix = document.body.classList.contains('matrix-mode');
+                ctx.fillStyle = isMatrix ? `rgba(0, 255, 65, ${this.alpha})` : this.color + this.alpha + ')';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 65; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Scroll Reveal
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.12 });
+        reveals.forEach(el => observer.observe(el));
+
+        // Click Energy Burst
+        window.addEventListener('mousedown', e => {
+            const burst = document.createElement('div');
+            burst.className = 'energy-burst';
+            burst.style.left = `${e.clientX}px`;
+            burst.style.top = `${e.clientY}px`;
+            if (document.body.classList.contains('matrix-mode')) {
+                burst.style.background = 'radial-gradient(circle, rgba(0,255,65,0.4) 0%, transparent 70%)';
+            }
+            document.body.appendChild(burst);
+            setTimeout(() => burst.remove(), 550);
+        });
+
+        // Mobile menu
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileClose = document.getElementById('mobile-menu-close');
+        if (mobileBtn) mobileBtn.addEventListener('click', () => mobileMenu.classList.add('open'));
+        if (mobileClose) mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        document.querySelectorAll('#mobile-menu a').forEach(a => {
+            a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        });
+    </script>
+</body>
+</html>
